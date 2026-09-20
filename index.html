@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Gilbert Ola — Digital Marketing Infrastructure Builder</title>
+<meta name="description" content="Gilbert builds the CRM, email automation, ad, and LinkedIn infrastructure that lets marketing teams scale without breaking. Remote, worldwide." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    --bg:#EEF1EC;
+    --surface:#FFFFFF;
+    --ink:#15201C;
+    --muted:#5C6B63;
+    --green:#1F6F4A;
+    --green-bright:#2E8C5D;
+    --on-green:#F3F6F1;
+    --accent2:#34506B;
+    --border:rgba(21,32,28,0.13);
+    --border-strong:rgba(21,32,28,0.24);
+    --shadow:0 1px 2px rgba(21,32,28,0.06);
+    --radius:3px;
+    --font-display:'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    --font-body:'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-mono:'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#10140F;
+      --surface:#171D17;
+      --ink:#EAEFEA;
+      --muted:#9DAEA4;
+      --green:#3AAE76;
+      --green-bright:#4FC98A;
+      --on-green:#0B120D;
+      --accent2:#86ABC9;
+      --border:rgba(234,239,234,0.14);
+      --border-strong:rgba(234,239,234,0.28);
+      --shadow:0 1px 2px rgba(0,0,0,0.4);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#10140F;
+    --surface:#171D17;
+    --ink:#EAEFEA;
+    --muted:#9DAEA4;
+    --green:#3AAE76;
+    --green-bright:#4FC98A;
+    --on-green:#0B120D;
+    --accent2:#86ABC9;
+    --border:rgba(234,239,234,0.14);
+    --border-strong:rgba(234,239,234,0.28);
+    --shadow:0 1px 2px rgba(0,0,0,0.4);
+    color-scheme: dark;
+  }
+
+  /* ============ RESET ============ */
+  *,*::before,*::after{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%; scroll-padding-top: calc(72px + env(safe-area-inset-top,0px));}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  img{max-width:100%;display:block;}
+  a{color:inherit;text-decoration:none;}
+  button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;}
+  ul{margin:0;padding:0;list-style:none;}
+  h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;margin:0;line-height:1.15;letter-spacing:-0.01em;}
+  p{margin:0;}
+  :focus-visible{outline:2px solid var(--green);outline-offset:3px;}
+  .wrap{max-width:1080px;margin:0 auto;padding-left:20px;padding-right:20px;}
+  @media(min-width:768px){.wrap{padding-left:40px;padding-right:40px;}}
+  .mono{font-family:var(--font-mono);font-size:0.78rem;letter-spacing:0.01em;color:var(--muted);}
+  .view{display:none;}
+  .view.is-active{display:block;}
+  .visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+  .skip-link{position:fixed;top:-100%;left:12px;background:var(--green);color:var(--on-green);padding:10px 16px;border-radius:var(--radius);z-index:200;transition:top .15s ease;}
+  .skip-link:focus{top:calc(12px + env(safe-area-inset-top,0px));}
+
+  /* node/pipeline marker used before section headings */
+  .node-label{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .node-label .dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex:none;}
+  .node-label .line{height:1px;width:28px;background:var(--border-strong);flex:none;}
+  .node-label span.txt{font-family:var(--font-mono);font-size:0.78rem;color:var(--muted);}
+
+  /* ============ HEADER ============ */
+  header.site{
+    position:sticky;top:0;z-index:100;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+    padding-top:env(safe-area-inset-top,0px);
+  }
+  .header-row{
+    display:flex;align-items:center;justify-content:space-between;
+    height:64px;
+  }
+  .brand{display:flex;align-items:center;gap:11px;}
+  .brand:hover .logo-box{background:var(--green-bright);}
+  .logo-box{
+    width:38px;height:38px;flex:none;
+    background:var(--green);color:var(--on-green);
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-display);font-weight:700;font-size:0.95rem;
+    border-radius:var(--radius);
+    transition:background .18s ease, transform .18s ease;
+  }
+  .brand:hover .logo-box{transform:translateY(-1px);}
+  .brand-name{font-family:var(--font-display);font-weight:600;font-size:1.02rem;}
+
+  .nav-right{display:flex;align-items:center;gap:6px;}
+  nav.primary-nav{display:none;}
+  nav.primary-nav ul{display:flex;gap:2px;}
+  nav.primary-nav a{
+    display:inline-block;padding:9px 13px;border-radius:var(--radius);
+    font-size:0.94rem;color:var(--muted);transition:color .15s ease;
+  }
+  nav.primary-nav a:hover{color:var(--ink);}
+  nav.primary-nav a[aria-current="page"]{color:var(--ink);font-weight:500;}
+
+  .talk-btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:9px 16px;border:1px solid var(--border-strong);border-radius:var(--radius);
+    font-size:0.92rem;font-weight:500;white-space:nowrap;
+    transition:background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .talk-btn:hover{background:var(--green);color:var(--on-green);border-color:var(--green);}
+  .talk-btn svg{width:14px;height:14px;flex:none;}
+
+  .menu-toggle{
+    display:flex;flex-direction:column;justify-content:center;gap:4px;
+    width:38px;height:38px;border:1px solid var(--border);border-radius:var(--radius);
+    align-items:center;
+  }
+  .menu-toggle span{width:16px;height:1.5px;background:var(--ink);display:block;transition:transform .2s ease, opacity .2s ease;}
+  .menu-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(5.5px) rotate(45deg);}
+  .menu-toggle[aria-expanded="true"] span:nth-child(2){opacity:0;}
+  .menu-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg);}
+
+  .mobile-panel{
+    display:none;
+    border-bottom:1px solid var(--border);
+    background:var(--bg);
+  }
+  .mobile-panel.is-open{display:block;}
+  .mobile-panel ul{padding:8px 0 18px;}
+  .mobile-panel a{display:block;padding:13px 4px;font-size:1.05rem;border-bottom:1px solid var(--border);}
+  .mobile-panel a[aria-current="page"]{color:var(--green);font-weight:600;}
+  .mobile-panel .talk-btn{margin-top:16px;width:100%;justify-content:center;}
+
+  @media(min-width:860px){
+    nav.primary-nav{display:block;}
+    .menu-toggle{display:none;}
+    .mobile-panel{display:none !important;}
+    .nav-right{gap:18px;}
+  }
+
+  /* ============ BUTTONS / SHARED ============ */
+  .btn{
+    display:inline-flex;align-items:center;gap:9px;
+    padding:12px 22px;border-radius:var(--radius);font-size:0.96rem;font-weight:500;
+    transition:background .15s ease, color .15s ease, border-color .15s ease, transform .15s ease;
+  }
+  .btn-primary{background:var(--green);color:var(--on-green);}
+  .btn-primary:hover{background:var(--green-bright);transform:translateY(-1px);}
+  .btn-ghost{border:1px solid var(--border-strong);}
+  .btn-ghost:hover{background:var(--surface);}
+  .btn-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px;}
+
+  section{padding:64px 0;}
+  @media(min-width:768px){section{padding:96px 0;}}
+  .section-alt{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+
+  /* ============ HOME / HERO ============ */
+  .hero h1{font-size:2.1rem;max-width:15ch;}
+  @media(min-width:640px){.hero h1{font-size:2.7rem;}}
+  @media(min-width:1000px){.hero h1{font-size:3.4rem;max-width:17ch;}}
+  .hero .lede{margin-top:20px;max-width:56ch;font-size:1.08rem;color:var(--muted);}
+
+  .stat-row{display:flex;flex-wrap:wrap;gap:40px;margin-top:44px;padding-top:32px;border-top:1px solid var(--border);}
+  .stat{min-width:120px;}
+  .stat .num{font-family:var(--font-display);font-weight:700;font-size:2.4rem;color:var(--green);display:flex;align-items:baseline;}
+  .stat .lbl{margin-top:4px;color:var(--muted);font-size:0.88rem;max-width:20ch;}
+
+  /* marquee */
+  .marquee-band{
+    margin-top:56px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+    padding:18px 0;overflow:hidden;position:relative;
+  }
+  .marquee-track{display:flex;width:max-content;gap:48px;animation:scroll-left 26s linear infinite;}
+  .marquee-track span{font-family:var(--font-mono);font-size:0.85rem;color:var(--muted);white-space:nowrap;display:flex;align-items:center;gap:10px;}
+  .marquee-track span::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block;}
+  @keyframes scroll-left{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+  @media(prefers-reduced-motion:reduce){.marquee-track{animation:none;overflow-x:auto;}}
+
+  /* ============ ABOUT ============ */
+  .about-grid{display:grid;gap:40px;}
+  @media(min-width:860px){.about-grid{grid-template-columns:1.1fr 0.9fr;gap:64px;align-items:start;}}
+  .about-copy p{margin-top:16px;color:var(--muted);max-width:58ch;}
+  .about-copy p:first-of-type{margin-top:20px;}
+  .glyph{width:100%;max-width:280px;}
+  .values{margin-top:32px;display:grid;gap:0;border-top:1px solid var(--border);}
+  .values li{padding:16px 0;border-bottom:1px solid var(--border);display:flex;gap:16px;}
+  .values li .k{font-family:var(--font-mono);font-size:0.78rem;color:var(--green);flex:none;width:2.2em;padding-top:2px;}
+  .values li .v strong{display:block;font-size:0.98rem;margin-bottom:2px;}
+  .values li .v span{color:var(--muted);font-size:0.9rem;}
+
+  /* ============ WORK ============ */
+  .filter-row{display:flex;flex-wrap:wrap;gap:8px;margin:36px 0 8px;}
+  .filter-chip{
+    padding:8px 15px;border:1px solid var(--border-strong);border-radius:999px;font-size:0.85rem;color:var(--muted);
+    transition:background .15s ease,color .15s ease,border-color .15s ease;
+  }
+  .filter-chip:hover{color:var(--ink);}
+  .filter-chip[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:var(--on-green);}
+  .work-grid{display:grid;gap:1px;background:var(--border);margin-top:28px;border:1px solid var(--border);}
+  @media(min-width:720px){.work-grid{grid-template-columns:1fr 1fr;}}
+  .work-card{background:var(--bg);padding:28px;transition:opacity .2s ease;}
+  .work-card .cat{font-family:var(--font-mono);font-size:0.72rem;color:var(--green);}
+  .work-card h3{margin-top:10px;font-size:1.12rem;max-width:26ch;}
+  .work-card p{margin-top:10px;color:var(--muted);font-size:0.93rem;}
+  .work-card .outcome{margin-top:14px;padding-top:14px;border-top:1px solid var(--border);font-size:0.88rem;}
+  .work-card .outcome b{color:var(--ink);}
+  .work-card[hidden]{display:none;}
+
+  /* ============ ARTICLES ============ */
+  .article-list{margin-top:32px;border-top:1px solid var(--border);}
+  .article-row{
+    display:block;padding:26px 0;border-bottom:1px solid var(--border);
+    display:flex;flex-direction:column;gap:6px;
+  }
+  @media(min-width:700px){.article-row{flex-direction:row;align-items:baseline;justify-content:space-between;gap:24px;}}
+  .article-row .date{font-family:var(--font-mono);font-size:0.75rem;color:var(--muted);flex:none;}
+  .article-row .body{flex:1;}
+  .article-row h3{font-size:1.08rem;transition:color .15s ease;}
+  .article-row:hover h3{color:var(--green);}
+  .article-row p{margin-top:6px;color:var(--muted);font-size:0.92rem;max-width:60ch;}
+  .article-row .read{margin-top:8px;display:inline-block;font-size:0.85rem;color:var(--green);}
+
+  .article-detail-body{margin-top:28px;max-width:65ch;}
+  .article-detail-body p{margin-top:16px;color:var(--muted);}
+  .article-detail-body p:first-of-type{margin-top:0;color:var(--ink);font-size:1.05rem;}
+  .back-link{display:inline-flex;align-items:center;gap:6px;margin-bottom:20px;color:var(--muted);font-size:0.9rem;}
+  .back-link:hover{color:var(--ink);}
+
+  /* ============ CONTACT ============ */
+  .contact-box{
+    margin-top:32px;border:1px solid var(--border);border-radius:var(--radius);
+    padding:32px 28px;background:var(--surface);display:flex;flex-direction:column;gap:18px;
+  }
+  @media(min-width:640px){.contact-box{padding:44px;}}
+  .contact-box .remote-tag{display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:0.8rem;color:var(--green);}
+  .contact-box .remote-tag .pulse{width:7px;height:7px;border-radius:50%;background:var(--green);position:relative;}
+  .contact-box .remote-tag .pulse::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--green);animation:pulse 2s ease-out infinite;}
+  @keyframes pulse{0%{transform:scale(1);opacity:.6;}100%{transform:scale(2.6);opacity:0;}}
+  @media(prefers-reduced-motion:reduce){.pulse::after{animation:none;display:none;}}
+  .contact-box h2{font-size:1.6rem;max-width:18ch;}
+  .contact-box .email-link{font-family:var(--font-display);font-size:1.3rem;font-weight:600;color:var(--green);word-break:break-word;}
+  @media(min-width:640px){.contact-box .email-link{font-size:1.6rem;}}
+  .contact-meta{display:flex;flex-wrap:wrap;gap:28px;margin-top:8px;padding-top:20px;border-top:1px solid var(--border);}
+  .contact-meta div span{display:block;color:var(--muted);font-size:0.85rem;}
+  .contact-meta div strong{display:block;margin-top:3px;font-size:0.95rem;}
+
+  /* ============ FOOTER ============ */
+  footer.site{border-top:1px solid var(--border);padding:44px 0 calc(44px + env(safe-area-inset-bottom,0px));}
+  .footer-row{display:flex;flex-direction:column;gap:28px;}
+  @media(min-width:700px){.footer-row{flex-direction:row;justify-content:space-between;align-items:flex-start;}}
+  .footer-brand{display:flex;align-items:center;gap:10px;}
+  .footer-brand .logo-box{width:30px;height:30px;font-size:0.8rem;}
+  .footer-tag{margin-top:10px;color:var(--muted);font-size:0.88rem;max-width:32ch;}
+  .footer-nav{display:flex;flex-wrap:wrap;gap:20px;}
+  .footer-nav a{color:var(--muted);font-size:0.9rem;}
+  .footer-nav a:hover{color:var(--ink);}
+  .footer-bottom{margin-top:32px;padding-top:20px;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;color:var(--muted);font-size:0.8rem;font-family:var(--font-mono);}
+
+  .top-eyebrow{margin-bottom:14px;}
+
+  /* ============ COVER GRAPHICS (work / articles) ============ */
+  .card-cover{
+    aspect-ratio:16/9;width:100%;border-radius:var(--radius);
+    background:var(--surface);border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:16px;
+  }
+  .card-cover svg{width:34%;height:34%;color:var(--green);}
+  .article-row .card-cover{aspect-ratio:1/1;width:76px;height:76px;flex:none;margin-bottom:0;}
+  .article-row .card-cover svg{width:40%;height:40%;}
+  @media(min-width:700px){.article-row .card-cover{width:96px;height:96px;}}
+  .article-detail-body .card-cover{aspect-ratio:21/9;margin-top:24px;}
+
+  /* ============ AVATAR (about) ============ */
+  .avatar-wrap{width:100%;max-width:220px;}
+  .avatar-photo{
+    width:100%;aspect-ratio:1/1;border-radius:var(--radius);object-fit:cover;
+    border:1px solid var(--border);display:block;
+  }
+  .avatar-placeholder{
+    width:100%;aspect-ratio:1/1;border-radius:var(--radius);
+    background:var(--surface);border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .avatar-placeholder span{
+    font-family:var(--font-display);font-weight:700;font-size:2.4rem;color:var(--green);
+  }
+  .avatar-note{margin-top:10px;font-size:0.78rem;color:var(--muted);max-width:220px;}
+
+  /* ============ FOOTER SOCIALS ============ */
+  .social-row{display:flex;gap:10px;margin-top:16px;}
+  .social-row a{
+    width:36px;height:36px;border:1px solid var(--border-strong);border-radius:var(--radius);
+    display:flex;align-items:center;justify-content:center;transition:background .15s ease,color .15s ease,border-color .15s ease;
+  }
+  .social-row a:hover{background:var(--green);border-color:var(--green);color:var(--on-green);}
+  .social-row svg{width:16px;height:16px;}
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<header class="site">
+  <div class="wrap header-row">
+    <a href="#home" class="brand" aria-label="Gilbert — home">
+      <span class="logo-box" aria-hidden="true">GO</span>
+      <span class="brand-name">Gilbert</span>
+    </a>
+
+    <div class="nav-right">
+      <nav class="primary-nav" aria-label="Primary">
+        <ul>
+          <li><a href="#home" data-route="home">Home</a></li>
+          <li><a href="#about" data-route="about">About</a></li>
+          <li><a href="#work" data-route="work">Work</a></li>
+          <li><a href="#articles" data-route="articles">Articles</a></li>
+          <li><a href="#contact" data-route="contact">Contact</a></li>
+        </ul>
+      </nav>
+      <a class="talk-btn" href="mailto:hello@gilbertgo.com?subject=Let%27s%20talk">
+        Let's talk
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="mobilePanel" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-panel" id="mobilePanel">
+    <div class="wrap">
+      <ul>
+        <li><a href="#home" data-route="home">Home</a></li>
+        <li><a href="#about" data-route="about">About</a></li>
+        <li><a href="#work" data-route="work">Work</a></li>
+        <li><a href="#articles" data-route="articles">Articles</a></li>
+        <li><a href="#contact" data-route="contact">Contact</a></li>
+      </ul>
+      <a class="talk-btn btn-primary" href="mailto:hello@gilbertgo.com?subject=Let%27s%20talk">Let's talk</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ HOME ============ -->
+  <section class="view is-active" id="view-home" data-view="home">
+    <div class="wrap hero">
+      <p class="mono top-eyebrow">Digital marketing infrastructure</p>
+      <h1>I build the systems marketing teams scale on.</h1>
+      <p class="lede">I'm Gilbert — I design and wire up the CRM flows, email automation, ad infrastructure, and LinkedIn pipelines that turn a marketing team's ideas into something that runs on its own. Less duct tape, more architecture.</p>
+
+      <div class="btn-row">
+        <a href="#work" class="btn btn-primary" data-route="work">See the work</a>
+        <a href="mailto:hello@gilbertgo.com?subject=Let%27s%20talk" class="btn btn-ghost">Let's talk</a>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat">
+          <div class="num"><span class="counter" data-target="60">0</span>+</div>
+          <div class="lbl">Clients served across SaaS, e-commerce, and agencies</div>
+        </div>
+        <div class="stat">
+          <div class="num"><span class="counter" data-target="7">0</span></div>
+          <div class="lbl">Years building marketing systems, remote-first</div>
+        </div>
+        <div class="stat">
+          <div class="num"><span class="counter" data-target="200">0</span>+</div>
+          <div class="lbl">Automations shipped that are still running today</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="marquee-band" aria-hidden="true">
+      <div class="marquee-track">
+        <span>CRM Architecture</span><span>Advertising Ops</span><span>Email Automation</span><span>Paid Ads</span><span>LinkedIn Systems</span><span>Mentorship</span>
+        <span>CRM Architecture</span><span>Advertising Ops</span><span>Email Automation</span><span>Paid Ads</span><span>LinkedIn Systems</span><span>Mentorship</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="view section-alt" id="view-about" data-view="about">
+    <div class="wrap">
+      <div class="node-label"><span class="dot"></span><span class="line"></span><span class="txt">About</span></div>
+      <div class="about-grid">
+        <div class="about-copy">
+          <h2 style="font-size:1.9rem;">The infrastructure work nobody sees — until it breaks.</h2>
+          <p>I got into marketing through the back door: fixing a client's CRM that was quietly losing leads between form fill and follow-up. That gap — between what a marketing team thinks is happening and what their tools are actually doing — is where I've spent most of my career.</p>
+          <p>Today I work with founders, marketing leads, and agencies who've outgrown manual follow-up and spreadsheet attribution. I map how leads actually move through their stack, then rebuild the CRM, email, ad, and outbound systems so that growth doesn't depend on someone remembering to send a reminder.</p>
+          <p>I work fully remote, across time zones, and I keep a small number of active engagements at a time so nothing I build gets left half-wired.</p>
+
+          <ul class="values">
+            <li><span class="k">01</span><div class="v"><strong>Systems before tactics</strong><span>A great ad or email underperforms if the infrastructure behind it is broken.</span></div></li>
+            <li><span class="k">02</span><div class="v"><strong>Boring is the goal</strong><span>The best automation is one nobody has to think about again.</span></div></li>
+            <li><span class="k">03</span><div class="v"><strong>Documented, not tribal</strong><span>Every system I build comes with a map so your team isn't locked out of it.</span></div></li>
+          </ul>
+        </div>
+
+        <div class="avatar-wrap">
+          <!-- Replace this placeholder with: <img class="avatar-photo" src="your-photo.jpg" alt="Gilbert"> -->
+          <div class="avatar-placeholder" role="img" aria-label="Photo placeholder for Gilbert">
+            <span>GO</span>
+          </div>
+          <p class="avatar-note">Placeholder — send a photo and I'll drop it in here.</p>
+
+          <svg class="glyph" viewBox="0 0 260 260" fill="none" aria-hidden="true" style="margin-top:24px;">
+            <circle cx="130" cy="40" r="7" fill="var(--green)"/>
+            <circle cx="40" cy="140" r="7" fill="var(--accent2)"/>
+            <circle cx="220" cy="140" r="7" fill="var(--accent2)"/>
+            <circle cx="80" cy="230" r="7" fill="var(--green)"/>
+            <circle cx="180" cy="230" r="7" fill="var(--green)"/>
+            <path d="M130 47V100M130 100L40 140M130 100L220 140M40 147L80 223M220 147L180 223M80 223L180 230" stroke="var(--border-strong)" stroke-width="1.5"/>
+            <circle cx="130" cy="100" r="10" fill="var(--bg)" stroke="var(--green)" stroke-width="2"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WORK ============ -->
+  <section class="view" id="view-work" data-view="work">
+    <div class="wrap">
+      <div class="node-label"><span class="dot"></span><span class="line"></span><span class="txt">Selected work</span></div>
+      <h2 style="font-size:1.9rem;max-width:20ch;">Systems built for teams who were done duct-taping it together.</h2>
+
+      <div class="filter-row" role="group" aria-label="Filter work by category">
+        <button class="filter-chip" aria-pressed="true" data-filter="all">All work</button>
+        <button class="filter-chip" aria-pressed="false" data-filter="crm">CRM &amp; Advertising</button>
+        <button class="filter-chip" aria-pressed="false" data-filter="email">Email Automation</button>
+        <button class="filter-chip" aria-pressed="false" data-filter="ads">Ads</button>
+        <button class="filter-chip" aria-pressed="false" data-filter="linkedin">LinkedIn</button>
+        <button class="filter-chip" aria-pressed="false" data-filter="mentorship">Mentorship</button>
+      </div>
+
+      <div class="work-grid" id="workGrid">
+        <div class="work-card" data-cat="crm">
+          <div class="card-cover" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6" cy="6" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="12" cy="18" r="2.4"/><path d="M8 7.4L11 16M16 7.4L13 16M8.4 6H15.6"/></svg></div>
+          <div class="cat">CRM &amp; Advertising</div>
+          <h3>HubSpot-to-ads sync for a DTC skincare brand</h3>
+          <p>Rebuilt the pipeline connecting form fills, CRM stages, and ad audiences so sales follow-up and retargeting fired off the same source of truth.</p>
+          <div class="outcome">Lead-to-call time dropped from <b>3 days to 4 hours</b></div>
+        </div>
+        <div class="work-card" data-cat="crm">
+          <div class="card-cover" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19V5M4 19H20M8 15l3-4 3 3 4-6"/></svg></div>
+          <div class="cat">CRM &amp; Advertising</div>
+          <h3>Attribution rebuild for a 7-figure agency</h3>
+          <p>Untangled duplicate contacts and broken UTMs across three ad platforms and one CRM that had never agreed on a single lead.</p>
+          <div class="outcome">Recovered <b>$40K/month</b> in previously misattributed spend</div>
+        </div>
+        <div class="work-card" data-cat="email">
+          <div class="card-cover" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="5.5" width="17" height="13" rx="1.5"/><path d="M4.5 6.5l7.5 6 7.5-6"/></svg></div>
+          <div class="cat">Email Automation</div>
+          <h3>12-email onboarding flow for a fintech SaaS</h3>
+          <p>Designed a behavior-triggered onboarding sequence that adapts based on which features a new user actually touches in week one.</p>
+          <div class="outcome"><b>31% lift</b> in trial-to-paid conversion</div>
+        </div>
+        <div class="work-card" data-cat="email">
+          <div class="card-cover" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12a9 9 0 1 1 3 6.7"/><path d="M3 12V7M3 12h5"/></svg></div>
+          <div class="cat">Email Automation</div>
+          <h3>Win-back automation for a subscription box brand</h3>
+          <p>Built a churn-prediction-lite flow that flags at-risk subscribers and routes them into a tailored win-back sequence automatically.</p>
+          <div class="outcome"><b>$18K</b> recovered revenue in the first quarter</div>
+        </div>
+        <div class="work-card" data-cat="ads">
+          <div class="card-cover" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.2"/><circle cx="12" cy="12" r="0.6" fill="currentColor"/></svg></div>
+          <div class="cat">Ads</div>
+          <h3>Meta + Google ad infrastructure for a coaching business</h3>
+          <p>Set up a shared conversion-tracking and budget-allocation system so ad spend moved toward whatever channel was actually converting that week.</p>
+          <div class="outcome"><b>3.2x ROAS</b> within 90 days</div>
+        </div>
+        <div class="work-card" data-cat="linkedin">
+          <div class="card-cover" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="4" height="4" rx="0.6"/><rect x="17" y="17" width="4" height="4" rx="0.6"/><path d="M7 6.5C11 8 13 11 17 17"/></svg></div>
+          <div class="cat">LinkedIn</div>
+          <h3>LinkedIn outbound system for a B2B consultancy</h3>
+          <p>Built a semi-automated prospecting and follow-up system that kept outbound personal without eating a founder's whole calendar.</p>
+          <div class="outcome"><b>40+ qualified calls</b> booked in 60 days</div>
+        </div>
+        <div class="work-card" data-cat="mentorship">
+          <div class="card-cover" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8.5" cy="8" r="2.6"/><circle cx="16" cy="9" r="2"/><path d="M3.5 19c0-3 2.2-5 5-5s5 2 5 5M14 19c0-2.2 1.4-4 4-4s4 1.5 4 4"/></svg></div>
+          <div class="cat">Mentorship</div>
+          <h3>1:1 mentorship program for junior marketing ops hires</h3>
+          <p>Ran a quarterly mentorship track for early-career marketing ops hires at two portfolio companies, covering tooling, systems thinking, and career growth.</p>
+          <div class="outcome"><b>6 mentees promoted</b> within a year</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ARTICLES LIST ============ -->
+  <section class="view section-alt" id="view-articles" data-view="articles">
+    <div class="wrap">
+      <div class="node-label"><span class="dot"></span><span class="line"></span><span class="txt">Articles</span></div>
+      <h2 style="font-size:1.9rem;">Notes on marketing infrastructure.</h2>
+      <div class="article-list" id="articleList"></div>
+    </div>
+  </section>
+
+  <!-- ============ ARTICLE DETAIL ============ -->
+  <section class="view" id="view-article" data-view="article">
+    <div class="wrap">
+      <a href="#articles" class="back-link" data-route="articles">&larr; Back to articles</a>
+      <p class="mono" id="articleDate"></p>
+      <h2 style="font-size:2rem;margin-top:10px;max-width:24ch;" id="articleTitle"></h2>
+      <div class="article-detail-body" id="articleBody"></div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="view" id="view-contact" data-view="contact">
+    <div class="wrap">
+      <div class="node-label"><span class="dot"></span><span class="line"></span><span class="txt">Contact</span></div>
+      <h2 style="font-size:1.9rem;max-width:20ch;">Have a marketing stack that needs wiring up properly?</h2>
+      <p style="margin-top:14px;color:var(--muted);max-width:52ch;">Tell me a bit about what's breaking or what you're trying to scale, and I'll reply within a day or two.</p>
+
+      <div class="contact-box">
+        <div class="remote-tag"><span class="pulse"></span> Working remotely — available worldwide</div>
+        <h2>Email is the fastest way to reach me</h2>
+        <a class="email-link" href="mailto:hello@gilbertgo.com?subject=Let%27s%20talk">hello@gilbertgo.com</a>
+        <div class="btn-row" style="margin-top:0;">
+          <a class="btn btn-primary" href="mailto:hello@gilbertgo.com?subject=Let%27s%20talk">Send an email</a>
+        </div>
+        <div class="contact-meta">
+          <div><span>Location</span><strong>Remote, worldwide</strong></div>
+          <div><span>Response time</span><strong>1–2 business days</strong></div>
+          <div><span>Availability</span><strong>Limited engagements per quarter</strong></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap footer-row">
+    <div>
+      <div class="footer-brand">
+        <span class="logo-box" aria-hidden="true">GO</span>
+        <span class="brand-name">Gilbert</span>
+      </div>
+      <p class="footer-tag">Digital marketing infrastructure builder, working remotely with teams worldwide.</p>
+      <div class="social-row">
+        <a href="https://linkedin.com/in/gilbertgo" aria-label="LinkedIn" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 10v7M7 7.2v.01M11 17v-4.5c0-1.5 1-2.5 2.3-2.5S15.5 11 15.5 12.5V17"/></svg>
+        </a>
+        <a href="https://twitter.com/gilbertgo" aria-label="Twitter / X" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 4l16 16M20 4L4 20"/></svg>
+        </a>
+        <a href="mailto:hello@gilbertgo.com" aria-label="Email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3.5" y="5.5" width="17" height="13" rx="1.5"/><path d="M4.5 6.5l7.5 6 7.5-6"/></svg>
+        </a>
+      </div>
+    </div>
+    <nav class="footer-nav" aria-label="Footer">
+      <a href="#home" data-route="home">Home</a>
+      <a href="#about" data-route="about">About</a>
+      <a href="#work" data-route="work">Work</a>
+      <a href="#articles" data-route="articles">Articles</a>
+      <a href="#contact" data-route="contact">Contact</a>
+    </nav>
+  </div>
+  <div class="wrap footer-bottom">
+    <span>© <span id="year"></span> Gilbert. All rights reserved.</span>
+    <span>Built remotely.</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var ICONS = {
+    "crm-automation-failure": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6" cy="6" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="12" cy="18" r="2.4"/><path d="M8 7.4L11 16M16 7.4L13 16M8.4 6H15.6"/></svg>',
+    "email-sequence-that-books-calls": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="5.5" width="17" height="13" rx="1.5"/><path d="M4.5 6.5l7.5 6 7.5-6"/></svg>',
+    "linkedin-is-a-pipeline": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="4" height="4" rx="0.6"/><rect x="17" y="17" width="4" height="4" rx="0.6"/><path d="M7 6.5C11 8 13 11 17 17"/></svg>'
+  };
+
+  var ARTICLES = [
+    {
+      slug: "crm-automation-failure",
+      title: "Why most CRMs fail before the first automation ever ships",
+      date: "2026-06-02",
+      excerpt: "The automation isn't the problem. The thing feeding it bad data is.",
+      body: [
+        "Most teams blame their CRM for lead leakage, when the real issue is usually upstream: three different tools each hold a slightly different version of the same contact, and nobody has decided which one wins.",
+        "Before I automate anything, I map every place a lead's data can enter or change: the form, the ad platform, the CRM, the sales rep's notes. Automation applied on top of a messy map just moves the mess faster.",
+        "The fix is rarely a bigger tool. It's usually a smaller number of entry points, one clear owner for each field, and a CRM that's finally allowed to be the single source of truth it was bought to be.",
+        "Once that's true, the automations you add on top — lead scoring, routing, follow-up sequences — start compounding instead of fighting each other."
+      ]
+    },
+    {
+      slug: "email-sequence-that-books-calls",
+      title: "The email sequence that actually books calls",
+      date: "2026-04-18",
+      excerpt: "It's shorter, less clever, and triggered by behavior — not by a calendar.",
+      body: [
+        "The best-performing sequences I've built have almost nothing in common with the polished nurture flows most teams start with. They're shorter, plainer, and triggered by what a lead actually does, not by day 1, day 3, day 7 on a calendar.",
+        "A prospect who opens three pricing emails and never replies needs a different message than one who's gone completely dark. Most automation platforms can branch on that easily — most teams just never set the trigger up.",
+        "I typically build a core flow of four to six emails with two or three behavioral branches, then leave it alone for a month before touching subject lines. Volume of tweaks isn't what moves booked calls — the trigger logic is.",
+        "If your sequence hasn't changed its branching logic in the last six months, that's usually the highest-leverage place to look before writing a single new email."
+      ]
+    },
+    {
+      slug: "linkedin-is-a-pipeline",
+      title: "LinkedIn isn't a content channel. It's a pipeline.",
+      date: "2026-02-09",
+      excerpt: "Treat outbound like infrastructure and it stops depending on your mood that day.",
+      body: [
+        "Most B2B founders treat LinkedIn as a place to post and hope. The ones getting consistent calls booked treat it as a pipeline with stages, just like a CRM: identify, engage, qualify, book.",
+        "That means defining who counts as a fit before you ever send a message, building a short list of engagement triggers (a comment, a shared post, a mutual connection) instead of cold-opening every message, and tracking reply rates the same way you'd track email open rates.",
+        "None of this requires full automation, and I'd argue it shouldn't be fully automated — the personal part is the point. What it needs is structure, so outbound doesn't live entirely in one founder's head and disappear the week they're busy.",
+        "Once it's structured, it's also delegable. That's usually the real goal: a system a hire can run, not a habit only the founder can keep up."
+      ]
+    }
+  ];
+
+  var els = {
+    views: document.querySelectorAll(".view"),
+    navLinks: document.querySelectorAll("[data-route]"),
+    menuToggle: document.getElementById("menuToggle"),
+    mobilePanel: document.getElementById("mobilePanel"),
+    articleList: document.getElementById("articleList"),
+    articleTitle: document.getElementById("articleTitle"),
+    articleDate: document.getElementById("articleDate"),
+    articleBody: document.getElementById("articleBody")
+  };
+
+  function renderArticleList(){
+    els.articleList.innerHTML = ARTICLES.map(function(a){
+      var d = new Date(a.date);
+      var dateStr = d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+      return '<a class="article-row" href="#articles/' + a.slug + '">' +
+        '<div class="card-cover" aria-hidden="true">' + (ICONS[a.slug] || "") + '</div>' +
+        '<span class="date">' + dateStr + '</span>' +
+        '<span class="body"><h3>' + a.title + '</h3><p>' + a.excerpt + '</p>' +
+        '<span class="read">Read the full article &rarr;</span></span>' +
+      '</a>';
+    }).join("");
+  }
+
+  function renderArticle(slug){
+    var a = ARTICLES.filter(function(x){ return x.slug === slug; })[0];
+    if(!a){ return false; }
+    var d = new Date(a.date);
+    els.articleDate.textContent = d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+    els.articleTitle.textContent = a.title;
+    var cover = '<div class="card-cover" aria-hidden="true">' + (ICONS[a.slug] || "") + '</div>';
+    els.articleBody.innerHTML = cover + a.body.map(function(p){ return "<p>" + p + "</p>"; }).join("");
+    return true;
+  }
+
+  function setActiveView(name){
+    els.views.forEach(function(v){
+      v.classList.toggle("is-active", v.getAttribute("data-view") === name);
+    });
+    els.navLinks.forEach(function(l){
+      if(l.getAttribute("data-route") === name){
+        l.setAttribute("aria-current", "page");
+      } else {
+        l.removeAttribute("aria-current");
+      }
+    });
+  }
+
+  function route(){
+    var hash = window.location.hash.replace(/^#/, "") || "home";
+    var parts = hash.split("/");
+    var top = parts[0];
+
+    if(top === "articles" && parts[1]){
+      var ok = renderArticle(decodeURIComponent(parts[1]));
+      setActiveView(ok ? "article" : "articles");
+    } else if(["home","about","work","articles","contact"].indexOf(top) !== -1){
+      setActiveView(top);
+    } else {
+      setActiveView("home");
+    }
+    closeMobileMenu();
+    window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+  }
+
+  function openMobileMenu(){
+    els.mobilePanel.classList.add("is-open");
+    els.menuToggle.setAttribute("aria-expanded", "true");
+    els.menuToggle.setAttribute("aria-label", "Close menu");
+  }
+  function closeMobileMenu(){
+    els.mobilePanel.classList.remove("is-open");
+    els.menuToggle.setAttribute("aria-expanded", "false");
+    els.menuToggle.setAttribute("aria-label", "Open menu");
+  }
+  els.menuToggle.addEventListener("click", function(){
+    var isOpen = els.mobilePanel.classList.contains("is-open");
+    isOpen ? closeMobileMenu() : openMobileMenu();
+  });
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape") closeMobileMenu();
+  });
+
+  // Work filter
+  var chips = document.querySelectorAll(".filter-chip");
+  var cards = document.querySelectorAll(".work-card");
+  chips.forEach(function(chip){
+    chip.addEventListener("click", function(){
+      chips.forEach(function(c){ c.setAttribute("aria-pressed","false"); });
+      chip.setAttribute("aria-pressed","true");
+      var f = chip.getAttribute("data-filter");
+      cards.forEach(function(card){
+        var show = f === "all" || card.getAttribute("data-cat") === f;
+        card.hidden = !show;
+      });
+    });
+  });
+
+  // Counters
+  var counted = false;
+  function animateCounters(){
+    if(counted) return;
+    counted = true;
+    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    document.querySelectorAll(".counter").forEach(function(el){
+      var target = parseInt(el.getAttribute("data-target"), 10) || 0;
+      if(reduced){ el.textContent = target; return; }
+      var start = null, dur = 1100;
+      function step(ts){
+        if(!start) start = ts;
+        var p = Math.min((ts - start) / dur, 1);
+        el.textContent = Math.floor(p * target);
+        if(p < 1) requestAnimationFrame(step); else el.textContent = target;
+      }
+      requestAnimationFrame(step);
+    });
+  }
+  var heroObserver = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting) animateCounters(); });
+  }, { threshold: 0.4 });
+  var statRow = document.querySelector(".stat-row");
+  if(statRow) heroObserver.observe(statRow);
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  renderArticleList();
+  window.addEventListener("hashchange", route);
+  route();
+})();
+</script>
+</body>
+</html>
