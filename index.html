@@ -1,778 +1,361 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Gilbert Ola — Digital Marketing Infrastructure Builder</title>
-<meta name="description" content="Gilbert builds the CRM, email automation, ad, and LinkedIn infrastructure that lets marketing teams scale without breaking. Remote, worldwide." />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gilbert Onyebuchi — Marketing Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  /* ============ TOKENS ============ */
-  :root{
-    --bg:#EEF1EC;
-    --surface:#FFFFFF;
-    --ink:#15201C;
-    --muted:#5C6B63;
-    --green:#1F6F4A;
-    --green-bright:#2E8C5D;
-    --on-green:#F3F6F1;
-    --accent2:#34506B;
-    --border:rgba(21,32,28,0.13);
-    --border-strong:rgba(21,32,28,0.24);
-    --shadow:0 1px 2px rgba(21,32,28,0.06);
-    --radius:3px;
-    --font-display:'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
-    --font-body:'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
-    --font-mono:'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
-    color-scheme: light;
-  }
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){
-      --bg:#10140F;
-      --surface:#171D17;
-      --ink:#EAEFEA;
-      --muted:#9DAEA4;
-      --green:#3AAE76;
-      --green-bright:#4FC98A;
-      --on-green:#0B120D;
-      --accent2:#86ABC9;
-      --border:rgba(234,239,234,0.14);
-      --border-strong:rgba(234,239,234,0.28);
-      --shadow:0 1px 2px rgba(0,0,0,0.4);
-      color-scheme: dark;
-    }
-  }
-  :root[data-theme="dark"]{
-    --bg:#10140F;
-    --surface:#171D17;
-    --ink:#EAEFEA;
-    --muted:#9DAEA4;
-    --green:#3AAE76;
-    --green-bright:#4FC98A;
-    --on-green:#0B120D;
-    --accent2:#86ABC9;
-    --border:rgba(234,239,234,0.14);
-    --border-strong:rgba(234,239,234,0.28);
-    --shadow:0 1px 2px rgba(0,0,0,0.4);
-    color-scheme: dark;
-  }
-
-  /* ============ RESET ============ */
-  *,*::before,*::after{box-sizing:border-box;}
-  html{-webkit-text-size-adjust:100%; scroll-padding-top: calc(72px + env(safe-area-inset-top,0px));}
-  html,body{height:100%;}
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--ink);
-    font-family:var(--font-body);
-    font-size:16px;
-    line-height:1.55;
-    -webkit-font-smoothing:antialiased;
-    padding-top:env(safe-area-inset-top,0px);
-    padding-bottom:env(safe-area-inset-bottom,0px);
-  }
-  img{max-width:100%;display:block;}
-  a{color:inherit;text-decoration:none;}
-  button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;}
-  ul{margin:0;padding:0;list-style:none;}
-  h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;margin:0;line-height:1.15;letter-spacing:-0.01em;}
-  p{margin:0;}
-  :focus-visible{outline:2px solid var(--green);outline-offset:3px;}
-  .wrap{max-width:1080px;margin:0 auto;padding-left:20px;padding-right:20px;}
-  @media(min-width:768px){.wrap{padding-left:40px;padding-right:40px;}}
-  .mono{font-family:var(--font-mono);font-size:0.78rem;letter-spacing:0.01em;color:var(--muted);}
-  .view{display:none;}
-  .view.is-active{display:block;}
-  .visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
-  .skip-link{position:fixed;top:-100%;left:12px;background:var(--green);color:var(--on-green);padding:10px 16px;border-radius:var(--radius);z-index:200;transition:top .15s ease;}
-  .skip-link:focus{top:calc(12px + env(safe-area-inset-top,0px));}
-
-  /* node/pipeline marker used before section headings */
-  .node-label{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
-  .node-label .dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex:none;}
-  .node-label .line{height:1px;width:28px;background:var(--border-strong);flex:none;}
-  .node-label span.txt{font-family:var(--font-mono);font-size:0.78rem;color:var(--muted);}
-
-  /* ============ HEADER ============ */
-  header.site{
-    position:sticky;top:0;z-index:100;
-    background:color-mix(in srgb, var(--bg) 88%, transparent);
-    backdrop-filter:blur(10px);
-    -webkit-backdrop-filter:blur(10px);
-    border-bottom:1px solid var(--border);
-    padding-top:env(safe-area-inset-top,0px);
-  }
-  .header-row{
-    display:flex;align-items:center;justify-content:space-between;
-    height:64px;
-  }
-  .brand{display:flex;align-items:center;gap:11px;}
-  .brand:hover .logo-box{background:var(--green-bright);}
-  .logo-box{
-    width:38px;height:38px;flex:none;
-    background:var(--green);color:var(--on-green);
-    display:flex;align-items:center;justify-content:center;
-    font-family:var(--font-display);font-weight:700;font-size:0.95rem;
-    border-radius:var(--radius);
-    transition:background .18s ease, transform .18s ease;
-  }
-  .brand:hover .logo-box{transform:translateY(-1px);}
-  .brand-name{font-family:var(--font-display);font-weight:600;font-size:1.02rem;}
-
-  .nav-right{display:flex;align-items:center;gap:6px;}
-  nav.primary-nav{display:none;}
-  nav.primary-nav ul{display:flex;gap:2px;}
-  nav.primary-nav a{
-    display:inline-block;padding:9px 13px;border-radius:var(--radius);
-    font-size:0.94rem;color:var(--muted);transition:color .15s ease;
-  }
-  nav.primary-nav a:hover{color:var(--ink);}
-  nav.primary-nav a[aria-current="page"]{color:var(--ink);font-weight:500;}
-
-  .talk-btn{
-    display:inline-flex;align-items:center;gap:8px;
-    padding:9px 16px;border:1px solid var(--border-strong);border-radius:var(--radius);
-    font-size:0.92rem;font-weight:500;white-space:nowrap;
-    transition:background .15s ease, color .15s ease, border-color .15s ease;
-  }
-  .talk-btn:hover{background:var(--green);color:var(--on-green);border-color:var(--green);}
-  .talk-btn svg{width:14px;height:14px;flex:none;}
-
-  .menu-toggle{
-    display:flex;flex-direction:column;justify-content:center;gap:4px;
-    width:38px;height:38px;border:1px solid var(--border);border-radius:var(--radius);
-    align-items:center;
-  }
-  .menu-toggle span{width:16px;height:1.5px;background:var(--ink);display:block;transition:transform .2s ease, opacity .2s ease;}
-  .menu-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(5.5px) rotate(45deg);}
-  .menu-toggle[aria-expanded="true"] span:nth-child(2){opacity:0;}
-  .menu-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg);}
-
-  .mobile-panel{
-    display:none;
-    border-bottom:1px solid var(--border);
-    background:var(--bg);
-  }
-  .mobile-panel.is-open{display:block;}
-  .mobile-panel ul{padding:8px 0 18px;}
-  .mobile-panel a{display:block;padding:13px 4px;font-size:1.05rem;border-bottom:1px solid var(--border);}
-  .mobile-panel a[aria-current="page"]{color:var(--green);font-weight:600;}
-  .mobile-panel .talk-btn{margin-top:16px;width:100%;justify-content:center;}
-
-  @media(min-width:860px){
-    nav.primary-nav{display:block;}
-    .menu-toggle{display:none;}
-    .mobile-panel{display:none !important;}
-    .nav-right{gap:18px;}
-  }
-
-  /* ============ BUTTONS / SHARED ============ */
-  .btn{
-    display:inline-flex;align-items:center;gap:9px;
-    padding:12px 22px;border-radius:var(--radius);font-size:0.96rem;font-weight:500;
-    transition:background .15s ease, color .15s ease, border-color .15s ease, transform .15s ease;
-  }
-  .btn-primary{background:var(--green);color:var(--on-green);}
-  .btn-primary:hover{background:var(--green-bright);transform:translateY(-1px);}
-  .btn-ghost{border:1px solid var(--border-strong);}
-  .btn-ghost:hover{background:var(--surface);}
-  .btn-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px;}
-
-  section{padding:64px 0;}
-  @media(min-width:768px){section{padding:96px 0;}}
-  .section-alt{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
-
-  /* ============ HOME / HERO ============ */
-  .hero h1{font-size:2.1rem;max-width:15ch;}
-  @media(min-width:640px){.hero h1{font-size:2.7rem;}}
-  @media(min-width:1000px){.hero h1{font-size:3.4rem;max-width:17ch;}}
-  .hero .lede{margin-top:20px;max-width:56ch;font-size:1.08rem;color:var(--muted);}
-
-  .stat-row{display:flex;flex-wrap:wrap;gap:40px;margin-top:44px;padding-top:32px;border-top:1px solid var(--border);}
-  .stat{min-width:120px;}
-  .stat .num{font-family:var(--font-display);font-weight:700;font-size:2.4rem;color:var(--green);display:flex;align-items:baseline;}
-  .stat .lbl{margin-top:4px;color:var(--muted);font-size:0.88rem;max-width:20ch;}
-
-  /* marquee */
-  .marquee-band{
-    margin-top:56px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);
-    padding:18px 0;overflow:hidden;position:relative;
-  }
-  .marquee-track{display:flex;width:max-content;gap:48px;animation:scroll-left 26s linear infinite;}
-  .marquee-track span{font-family:var(--font-mono);font-size:0.85rem;color:var(--muted);white-space:nowrap;display:flex;align-items:center;gap:10px;}
-  .marquee-track span::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block;}
-  @keyframes scroll-left{from{transform:translateX(0);}to{transform:translateX(-50%);}}
-  @media(prefers-reduced-motion:reduce){.marquee-track{animation:none;overflow-x:auto;}}
-
-  /* ============ ABOUT ============ */
-  .about-grid{display:grid;gap:40px;}
-  @media(min-width:860px){.about-grid{grid-template-columns:1.1fr 0.9fr;gap:64px;align-items:start;}}
-  .about-copy p{margin-top:16px;color:var(--muted);max-width:58ch;}
-  .about-copy p:first-of-type{margin-top:20px;}
-  .glyph{width:100%;max-width:280px;}
-  .values{margin-top:32px;display:grid;gap:0;border-top:1px solid var(--border);}
-  .values li{padding:16px 0;border-bottom:1px solid var(--border);display:flex;gap:16px;}
-  .values li .k{font-family:var(--font-mono);font-size:0.78rem;color:var(--green);flex:none;width:2.2em;padding-top:2px;}
-  .values li .v strong{display:block;font-size:0.98rem;margin-bottom:2px;}
-  .values li .v span{color:var(--muted);font-size:0.9rem;}
-
-  /* ============ WORK ============ */
-  .filter-row{display:flex;flex-wrap:wrap;gap:8px;margin:36px 0 8px;}
-  .filter-chip{
-    padding:8px 15px;border:1px solid var(--border-strong);border-radius:999px;font-size:0.85rem;color:var(--muted);
-    transition:background .15s ease,color .15s ease,border-color .15s ease;
-  }
-  .filter-chip:hover{color:var(--ink);}
-  .filter-chip[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:var(--on-green);}
-  .work-grid{display:grid;gap:1px;background:var(--border);margin-top:28px;border:1px solid var(--border);}
-  @media(min-width:720px){.work-grid{grid-template-columns:1fr 1fr;}}
-  .work-card{background:var(--bg);padding:28px;transition:opacity .2s ease;}
-  .work-card .cat{font-family:var(--font-mono);font-size:0.72rem;color:var(--green);}
-  .work-card h3{margin-top:10px;font-size:1.12rem;max-width:26ch;}
-  .work-card p{margin-top:10px;color:var(--muted);font-size:0.93rem;}
-  .work-card .outcome{margin-top:14px;padding-top:14px;border-top:1px solid var(--border);font-size:0.88rem;}
-  .work-card .outcome b{color:var(--ink);}
-  .work-card[hidden]{display:none;}
-
-  /* ============ ARTICLES ============ */
-  .article-list{margin-top:32px;border-top:1px solid var(--border);}
-  .article-row{
-    display:block;padding:26px 0;border-bottom:1px solid var(--border);
-    display:flex;flex-direction:column;gap:6px;
-  }
-  @media(min-width:700px){.article-row{flex-direction:row;align-items:baseline;justify-content:space-between;gap:24px;}}
-  .article-row .date{font-family:var(--font-mono);font-size:0.75rem;color:var(--muted);flex:none;}
-  .article-row .body{flex:1;}
-  .article-row h3{font-size:1.08rem;transition:color .15s ease;}
-  .article-row:hover h3{color:var(--green);}
-  .article-row p{margin-top:6px;color:var(--muted);font-size:0.92rem;max-width:60ch;}
-  .article-row .read{margin-top:8px;display:inline-block;font-size:0.85rem;color:var(--green);}
-
-  .article-detail-body{margin-top:28px;max-width:65ch;}
-  .article-detail-body p{margin-top:16px;color:var(--muted);}
-  .article-detail-body p:first-of-type{margin-top:0;color:var(--ink);font-size:1.05rem;}
-  .back-link{display:inline-flex;align-items:center;gap:6px;margin-bottom:20px;color:var(--muted);font-size:0.9rem;}
-  .back-link:hover{color:var(--ink);}
-
-  /* ============ CONTACT ============ */
-  .contact-box{
-    margin-top:32px;border:1px solid var(--border);border-radius:var(--radius);
-    padding:32px 28px;background:var(--surface);display:flex;flex-direction:column;gap:18px;
-  }
-  @media(min-width:640px){.contact-box{padding:44px;}}
-  .contact-box .remote-tag{display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:0.8rem;color:var(--green);}
-  .contact-box .remote-tag .pulse{width:7px;height:7px;border-radius:50%;background:var(--green);position:relative;}
-  .contact-box .remote-tag .pulse::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--green);animation:pulse 2s ease-out infinite;}
-  @keyframes pulse{0%{transform:scale(1);opacity:.6;}100%{transform:scale(2.6);opacity:0;}}
-  @media(prefers-reduced-motion:reduce){.pulse::after{animation:none;display:none;}}
-  .contact-box h2{font-size:1.6rem;max-width:18ch;}
-  .contact-box .email-link{font-family:var(--font-display);font-size:1.3rem;font-weight:600;color:var(--green);word-break:break-word;}
-  @media(min-width:640px){.contact-box .email-link{font-size:1.6rem;}}
-  .contact-meta{display:flex;flex-wrap:wrap;gap:28px;margin-top:8px;padding-top:20px;border-top:1px solid var(--border);}
-  .contact-meta div span{display:block;color:var(--muted);font-size:0.85rem;}
-  .contact-meta div strong{display:block;margin-top:3px;font-size:0.95rem;}
-
-  /* ============ FOOTER ============ */
-  footer.site{border-top:1px solid var(--border);padding:44px 0 calc(44px + env(safe-area-inset-bottom,0px));}
-  .footer-row{display:flex;flex-direction:column;gap:28px;}
-  @media(min-width:700px){.footer-row{flex-direction:row;justify-content:space-between;align-items:flex-start;}}
-  .footer-brand{display:flex;align-items:center;gap:10px;}
-  .footer-brand .logo-box{width:30px;height:30px;font-size:0.8rem;}
-  .footer-tag{margin-top:10px;color:var(--muted);font-size:0.88rem;max-width:32ch;}
-  .footer-nav{display:flex;flex-wrap:wrap;gap:20px;}
-  .footer-nav a{color:var(--muted);font-size:0.9rem;}
-  .footer-nav a:hover{color:var(--ink);}
-  .footer-bottom{margin-top:32px;padding-top:20px;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;color:var(--muted);font-size:0.8rem;font-family:var(--font-mono);}
-
-  .top-eyebrow{margin-bottom:14px;}
-
-  /* ============ COVER GRAPHICS (work / articles) ============ */
-  .card-cover{
-    aspect-ratio:16/9;width:100%;border-radius:var(--radius);
-    background:var(--surface);border:1px solid var(--border);
-    display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:16px;
-  }
-  .card-cover svg{width:34%;height:34%;color:var(--green);}
-  .article-row .card-cover{aspect-ratio:1/1;width:76px;height:76px;flex:none;margin-bottom:0;}
-  .article-row .card-cover svg{width:40%;height:40%;}
-  @media(min-width:700px){.article-row .card-cover{width:96px;height:96px;}}
-  .article-detail-body .card-cover{aspect-ratio:21/9;margin-top:24px;}
-
-  /* ============ AVATAR (about) ============ */
-  .avatar-wrap{width:100%;max-width:220px;}
-  .avatar-photo{
-    width:100%;aspect-ratio:1/1;border-radius:var(--radius);object-fit:cover;
-    border:1px solid var(--border);display:block;
-  }
-  .avatar-placeholder{
-    width:100%;aspect-ratio:1/1;border-radius:var(--radius);
-    background:var(--surface);border:1px solid var(--border);
-    display:flex;align-items:center;justify-content:center;
-  }
-  .avatar-placeholder span{
-    font-family:var(--font-display);font-weight:700;font-size:2.4rem;color:var(--green);
-  }
-  .avatar-note{margin-top:10px;font-size:0.78rem;color:var(--muted);max-width:220px;}
-
-  /* ============ FOOTER SOCIALS ============ */
-  .social-row{display:flex;gap:10px;margin-top:16px;}
-  .social-row a{
-    width:36px;height:36px;border:1px solid var(--border-strong);border-radius:var(--radius);
-    display:flex;align-items:center;justify-content:center;transition:background .15s ease,color .15s ease,border-color .15s ease;
-  }
-  .social-row a:hover{background:var(--green);border-color:var(--green);color:var(--on-green);}
-  .social-row svg{width:16px;height:16px;}
+:root{--bg:#fff;--fg:#111;--mut:#6a6a6a;--line:#e8e8e8;--ink:#1d2b2e;--gold:#e8b23a;--sh:0 10px 28px rgba(0,0,0,.14);--sh2:0 18px 44px rgba(0,0,0,.18);color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html.lenis{height:auto}.lenis.lenis-smooth{scroll-behavior:auto!important}.lenis-stopped{overflow:hidden}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--fg);font:400 clamp(1rem,.95rem + .25vw,1.125rem)/1.55 "Inter Tight",system-ui,sans-serif;overflow-x:clip}
+a{color:inherit;text-decoration:none}
+a:focus-visible,button:focus-visible{outline:2px solid var(--fg);outline-offset:3px}
+.wrap{padding-inline:clamp(16px,4vw,56px);max-width:1500px;margin-inline:auto}
+section{padding-block:clamp(72px,11vw,150px)}
+h1,h2,.big{font-family:"DM Serif Display",Georgia,serif;font-weight:400;letter-spacing:-.02em;line-height:1.02}
+h2{font-size:clamp(2.1rem,6vw,4.8rem)}
+.eyebrow{font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin-bottom:clamp(16px,2.5vw,28px)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;border-radius:99px;background:var(--fg);color:#fff;font-weight:500;border:1px solid var(--fg);box-shadow:var(--sh);transition:transform .3s,box-shadow .3s;min-height:48px}
+.btn:hover{transform:translateY(-3px);box-shadow:var(--sh2)}
+.btn.ghost{background:#fff;color:var(--fg);border-color:var(--line)}
+.btn.sm{padding:9px 16px;min-height:40px;font-size:.9rem}
+.lg{width:1.6em;height:1.6em;fill:currentColor;flex:none}
+/* intro */
+#pre{position:fixed;inset:0;z-index:100;color:#fff;display:grid;place-items:center}
+#pre .hl,#pre .hr{position:absolute;top:0;bottom:0;width:50.5%;background:var(--ink)}#pre .hl{left:0}#pre .hr{right:0}
+#pre .mid{position:relative;text-align:center}
+.frame{position:relative;width:clamp(150px,34vw,260px);aspect-ratio:3/4;margin:0 auto;border-radius:18px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.45)}
+.frame img{width:100%;height:100%;object-fit:cover;display:block}
+.badge{position:absolute;left:50%;bottom:-22px;margin-left:-32px;width:64px;height:64px;border-radius:50%;background:#fff;color:#111;display:grid;place-items:center;box-shadow:0 8px 20px rgba(0,0,0,.35)}
+.badge svg{width:42px;height:42px;fill:currentColor}
+#pre .nm{margin-top:42px;font:400 clamp(1.4rem,4vw,2.2rem) "DM Serif Display",Georgia,serif}
+#pre .cnt{position:absolute;left:clamp(16px,4vw,56px);bottom:calc(env(safe-area-inset-bottom,0px) + 24px);font-size:clamp(3rem,13vw,8rem);line-height:.8;font-weight:500;font-variant-numeric:tabular-nums}
+#skip{position:absolute;right:clamp(16px,4vw,56px);bottom:calc(env(safe-area-inset-bottom,0px) + 24px);background:none;border:1px solid #fff;color:#fff;border-radius:99px;padding:10px 18px;font:inherit;font-size:.9rem;cursor:pointer;min-height:44px}
+/* header */
+#hd{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:calc(env(safe-area-inset-top,0px) + 12px) clamp(16px,4vw,56px) 12px;background:#fff;transition:box-shadow .3s}
+#hd.on{box-shadow:0 6px 20px rgba(0,0,0,.08)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:600;letter-spacing:-.02em}.logo svg{width:34px;height:34px;fill:currentColor}
+/* contact row (shared) */
+.cr{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px}
+.so{width:42px;height:42px;border-radius:50%;background:#444;color:#fff;display:grid;place-items:center;box-shadow:var(--sh);transition:transform .3s,box-shadow .3s}
+.so:hover{transform:translateY(-3px);box-shadow:var(--sh2)}
+.so svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.em{display:flex;align-items:center;gap:10px;background:#f4f4f4;border:1px solid var(--line);border-radius:99px;padding:5px 8px 5px 6px;max-width:100%}
+.em>a{display:flex;align-items:center;gap:10px;min-width:0;color:var(--mut)}
+.em .so{width:34px;height:34px;box-shadow:none;flex:none}
+.em span{overflow:hidden;text-overflow:ellipsis;font-size:.95rem}
+.cp{width:36px;height:36px;border:0;border-radius:50%;background:none;cursor:pointer;color:var(--fg);display:grid;place-items:center;flex:none}
+.cp svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+/* hero */
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;isolation:isolate;padding:110px 0 clamp(40px,6vw,80px)}
+.hbg{position:absolute;inset:0;z-index:-3}.hbg img{width:100%;height:100%;object-fit:cover;object-position:center 20%;animation:kb 26s ease-in-out infinite alternate}
+@keyframes kb{to{transform:scale(1.08)}}
+.veil{position:absolute;inset:0;z-index:-2;background:rgba(255,255,255,.62)}
+.dots{position:absolute;left:50%;top:50%;width:min(140vw,1150px);aspect-ratio:1;transform:translate(-50%,-50%);z-index:-1;pointer-events:none;overflow:visible}
+.dots circle{fill:none;stroke:#111;stroke-linecap:round}.dots g{transform-box:fill-box;transform-origin:center}
+.d1{animation:spin 90s linear infinite}.d2{animation:spin 64s linear infinite reverse}.d3{animation:spin 38s linear infinite}
+.dots .sat{fill:#111;stroke:none;filter:drop-shadow(0 4px 5px rgba(0,0,0,.3))}
+.dots .rp{transform-box:fill-box;transform-origin:center;animation:rip 4s ease-out infinite;stroke-width:2}
+@keyframes rip{from{transform:scale(.5);opacity:.4}to{transform:scale(1.6);opacity:0}}
+.hc{display:flex;flex-direction:column;align-items:center;gap:clamp(18px,3vw,30px)}
+.who{font-size:.85rem;letter-spacing:.16em;text-transform:uppercase;color:#222;font-weight:500}
+.avail{display:inline-flex;align-items:center;gap:10px;font-size:.95rem;font-weight:500;color:var(--fg);background:#fff;box-shadow:var(--sh);border-radius:99px;padding:7px 16px}
+.avail b{width:8px;height:8px;border-radius:50%;background:#2fb457;animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(47,180,87,.5)}70%,100%{box-shadow:0 0 0 8px rgba(47,180,87,0)}}
+#h1{font-size:clamp(2.3rem,6.8vw,6rem);max-width:16ch}
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding:0 .04em .12em}.w>span{display:inline-block}
+.sub{max-width:36rem;color:#333}
+.cta{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
+.ringw{position:absolute;right:clamp(16px,4vw,56px);bottom:clamp(16px,3vw,40px);display:block;width:clamp(84px,11vw,148px);aspect-ratio:1;border-radius:50%;background:#fff;box-shadow:var(--sh);transition:transform .4s,box-shadow .4s}
+.ringw:hover{transform:scale(1.08);box-shadow:var(--sh2)}
+.ring{width:100%;height:100%;fill:var(--fg);animation:spin 16s linear infinite}
+.ring text{font-size:11.5px;letter-spacing:.1em;font-weight:500}
+@keyframes spin{to{transform:rotate(360deg)}}
+.arr{position:absolute;inset:32%;border-radius:50%;background:var(--fg);display:grid;place-items:center;color:#fff;transition:transform .4s}
+.ringw:hover .arr{transform:rotate(-45deg)}
+.bl{display:inline-flex;flex-direction:column;height:1.5em;line-height:1.5em;overflow:hidden;vertical-align:middle}
+.bl>span{display:block;transition:transform .55s cubic-bezier(.7,0,.2,1)}
+.btn:hover .bl>span,.btn:focus-visible .bl>span,.lt:hover .bl>span,.lt:focus-visible .bl>span{transform:translateY(-100%)}
+/* lets talk: fill slides in on hover */
+.lt{position:relative;overflow:hidden;isolation:isolate;display:inline-flex;align-items:center;padding:11px 20px;border-radius:99px;background:#fff;color:#111;box-shadow:var(--sh);font-weight:500;min-height:44px;transition:color .4s,box-shadow .3s}
+.lt::before{content:"";position:absolute;inset:0;background:var(--fg);transform:translateX(-101%);transition:transform .5s cubic-bezier(.7,0,.2,1);z-index:-1}
+.lt svg{width:0;opacity:0;transform:translateX(-14px);transition:width .4s,margin .4s,opacity .4s,transform .4s;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lt:hover,.lt:focus-visible{color:#fff;box-shadow:var(--sh2)}.lt:hover::before,.lt:focus-visible::before{transform:none}
+.lt:hover svg,.lt:focus-visible svg{width:16px;margin-left:8px;opacity:1;transform:none}
+/* about */
+#lead{font:400 clamp(1.7rem,4.4vw,3.6rem)/1.12 "DM Serif Display",Georgia,serif;letter-spacing:-.02em;max-width:26ch}
+.ab{display:grid;gap:clamp(32px,5vw,72px);margin-top:clamp(40px,7vw,96px)}
+@media(min-width:860px){.ab{grid-template-columns:5fr 7fr;align-items:center}}
+.pt{width:100%;max-width:420px;aspect-ratio:4/5;object-fit:cover;border-radius:20px;box-shadow:var(--sh2);transition:transform .5s}
+.pt:hover{transform:rotate(-2deg) scale(1.02)}
+.st{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px;padding-top:24px;border-top:1px solid var(--line)}
+.st strong{display:block;font:400 clamp(1.8rem,4.4vw,3.2rem)/1 "DM Serif Display",Georgia,serif}.st span{font-size:.85rem;color:var(--mut)}
+/* tornado */
+#clients{overflow:hidden;text-align:center}
+#clients .eyebrow{margin-bottom:16px}
+#tw{position:relative;height:clamp(420px,76vw,640px);margin-top:clamp(16px,3vw,40px);overflow:hidden}
+/* cases */
+.cs{border-top:1px solid var(--line);padding-block:clamp(48px,8vw,110px)}
+.ch{display:grid;gap:24px clamp(24px,5vw,80px);margin-bottom:clamp(24px,4vw,48px)}
+@media(min-width:860px){.ch{grid-template-columns:7fr 5fr;align-items:start}}
+.flag{position:relative;display:block;width:fit-content;margin:0 0 20px;padding-left:4px}
+.flag::before{content:"";position:absolute;left:0;top:-8px;bottom:-26px;width:3px;border-radius:2px;background:var(--ink)}
+.fw,.kf{position:relative}
+.fs{position:absolute;top:0;overflow:hidden;transform-origin:0 0;will-change:transform}
+.fi{position:absolute;top:0}.fd{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none}
+.fcnt{width:100%;height:100%;display:flex;align-items:center;padding-left:16px;font-weight:600;font-size:.95rem;color:#111;white-space:nowrap}
+.cn{font:400 clamp(2rem,4.4vw,3.5rem)/1 "DM Serif Display",Georgia,serif;letter-spacing:-.02em}
+.hl2{font-size:clamp(1.2rem,2.5vw,1.9rem);font-weight:500;line-height:1.2;letter-spacing:-.02em;max-width:26ch;margin-top:10px}
+.cd>p{color:var(--mut)}
+.imp{list-style:none;padding:0;margin:14px 0 22px;display:grid;gap:8px}
+.imp li{display:flex;gap:10px;font-size:.95rem}.imp li::before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:var(--fg);margin-top:.6em}
+.bn{display:grid;gap:14px}
+@media(min-width:860px){.bn{grid-template-columns:1.75fr 1fr}}
+.media{position:relative;overflow:hidden;border-radius:20px;background:#fff;box-shadow:var(--sh2);min-height:clamp(260px,40vw,520px)}
+.vis{position:absolute;inset:0;overflow:hidden;background:var(--ink)}
+.art{position:absolute;left:0;right:0;top:-10%;height:120%}
+.sc{position:relative;width:100%;height:100%;transition:transform .9s cubic-bezier(.2,.7,.2,1);display:flex;align-items:flex-end;padding:5%;color:#fff;font:400 clamp(3rem,12vw,9rem)/.8 "DM Serif Display",Georgia,serif;overflow:hidden}
+.sc::before{content:"";position:absolute;right:-8%;top:8%;width:46%;aspect-ratio:1;border-radius:50%;background:var(--a)}
+.sc::after{content:attr(data-m);position:absolute;left:5%;top:7%;font:500 clamp(.8rem,1.6vw,1rem)/1.3 "Inter Tight",sans-serif;letter-spacing:.1em;text-transform:uppercase;opacity:.85}
+.media:hover .sc{transform:scale(1.07)}
+.bc{display:grid;gap:14px;grid-template-rows:auto 1fr}
+.mt{position:relative;overflow:hidden;border-radius:20px;background:var(--b);color:#fff;padding:clamp(20px,3vw,32px);min-height:210px;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:var(--sh)}
+.mt::before{content:"";position:absolute;right:-12%;top:-30%;width:60%;aspect-ratio:1;border-radius:50%;background:var(--a);opacity:.9}
+.mt b{position:relative;font:400 clamp(2.8rem,6vw,4.6rem)/1 "DM Serif Display",Georgia,serif}.mt span{position:relative;font-weight:500;font-size:1.05rem}
+.tm{background:#efefef;border-radius:20px;padding:clamp(20px,3vw,28px);box-shadow:var(--sh)}
+.tm h4{font-size:clamp(1.1rem,2vw,1.4rem);line-height:1.2;font-weight:500;letter-spacing:-.01em}.tm p{color:var(--mut);margin-top:10px;font-size:.93rem}
+.wh{display:flex;align-items:center;gap:12px;margin-top:20px}.av{width:44px;height:44px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:600;flex:none}
+.wh i{display:block;font:italic 400 1.05rem "DM Serif Display",Georgia,serif}.wh small{color:var(--mut)}
+/* skills fan */
+.sk-h{text-align:center;display:flex;flex-direction:column;align-items:center;gap:20px}.sk-h .eyebrow{margin:0}
+.fan{--cw:clamp(140px,13.5vw,200px);--ch:290px;--st:8deg;position:relative;height:calc(var(--ch) + 130px);margin-top:clamp(36px,5vw,64px)}
+.fc2{position:absolute;left:50%;top:0;width:var(--cw);min-height:var(--ch);margin-left:calc(var(--cw)/-2);transform-origin:50% calc(var(--ch)*5);transform:rotate(calc(var(--i)*var(--st)));transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .4s;background:#171717;border:1.5px solid #d4a73a;border-radius:16px;padding:22px 16px;text-align:center;color:#fff;box-shadow:var(--sh)}
+.fc2:hover{z-index:5;transform:rotate(calc(var(--i)*var(--st))) translateY(-20px);box-shadow:var(--sh2)}
+.fc2 .mk{width:30px;height:30px;fill:#d4a73a;display:block;margin:0 auto 12px}
+.fc2 .ic{width:44px;height:44px;border-radius:50%;background:#333;display:grid;place-items:center;margin:0 auto 14px}.fc2 .ic svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.fc2 h3{font:400 1.25rem/1.15 "DM Serif Display",Georgia,serif;margin-bottom:8px}.fc2 p{color:#a6a6a6;font-size:.88rem}
+@media(min-width:1300px){.fan{--st:9.2deg}}@media(min-width:1500px){.fan{--st:10.5deg}}
+@media(max-width:1099px){.fan{height:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:14px}.fc2{position:static;width:auto;margin:0;transform:none!important;min-height:0}}
+/* tornado */
+.ci{position:absolute;left:0;top:0;white-space:nowrap;background:#fff;border:0;border-radius:99px;padding:.55em 1.1em;font:500 clamp(.78rem,1.7vw,1.05rem) "Inter Tight",sans-serif;color:var(--fg);cursor:pointer;will-change:transform;transition:background .25s,color .25s}
+.ci.h,.ci.s{background:var(--fg);color:#fff}
+#tc{position:absolute;left:50%;width:min(88%,340px);text-align:center;background:#fff;border-radius:20px;box-shadow:var(--sh2);padding:20px 22px;opacity:0;pointer-events:none;transform:translate(-50%,12px);transition:opacity .35s,transform .35s;z-index:2000}
+#tc.on{opacity:1;pointer-events:auto;transform:translate(-50%,0)}
+#tc small{color:var(--mut);letter-spacing:.1em;text-transform:uppercase;font-size:.72rem}#tc h3{font:400 1.5rem/1.15 "DM Serif Display",Georgia,serif}#tc p{color:var(--mut);font-size:.93rem;margin-top:6px}
+#tc .x{position:absolute;top:4px;right:6px;border:0;background:none;font-size:1.5rem;cursor:pointer;line-height:1;color:var(--fg);width:40px;height:40px}
+.hint{color:var(--mut);font-size:.85rem;margin-top:8px}
+/* footer */
+footer{position:relative;text-align:center;padding-top:clamp(72px,10vw,130px);overflow:hidden}
+.big{font-size:clamp(2.6rem,9vw,7rem)}
+.ft{max-width:30rem;margin:14px auto 28px;color:var(--mut)}
+.fr{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 22px;margin-top:36px;font-size:.95rem;color:var(--mut)}.fr a:hover{color:var(--fg)}
+.cpy{color:var(--mut);font-size:.85rem;margin-top:14px}
+#horse{position:relative;height:450px;margin-top:clamp(8px,2vw,24px);overflow:hidden}
+#horse .kn{position:absolute;left:0;bottom:12px;width:365px;height:650px;transform-origin:0 100%;will-change:transform}
+#horse .rot{position:absolute;inset:0}
+#horse .mir{position:absolute;inset:0;transform:scaleX(-1)}
+#horse .kz{position:absolute;left:0;top:0;width:365px;height:650px;overflow:visible;display:block}
+#horse .ks{position:absolute;left:80px;bottom:30px;width:270px;height:18px;border-radius:50%;background:rgba(41,41,41,.2)}
+#horse .kf{position:absolute;left:88px;top:-255px;transform-origin:100% 0}
+#horse svg.g{position:absolute;left:0;right:0;bottom:0;width:100%;height:24px;display:block}
+@media(prefers-reduced-motion:reduce){.ring,.avail b,.hbg img,.dots g,.dots .rp{animation:none}}
 </style>
 </head>
 <body>
-<a href="#main" class="skip-link">Skip to content</a>
-
-<header class="site">
-  <div class="wrap header-row">
-    <a href="#home" class="brand" aria-label="Gilbert — home">
-      <span class="logo-box" aria-hidden="true">GO</span>
-      <span class="brand-name">Gilbert</span>
-    </a>
-
-    <div class="nav-right">
-      <nav class="primary-nav" aria-label="Primary">
-        <ul>
-          <li><a href="#home" data-route="home">Home</a></li>
-          <li><a href="#about" data-route="about">About</a></li>
-          <li><a href="#work" data-route="work">Work</a></li>
-          <li><a href="#articles" data-route="articles">Articles</a></li>
-          <li><a href="#contact" data-route="contact">Contact</a></li>
-        </ul>
-      </nav>
-      <a class="talk-btn" href="mailto:hello@gilbertgo.com?subject=Let%27s%20talk">
-        Let's talk
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
-      <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="mobilePanel" aria-label="Open menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </div>
-
-  <div class="mobile-panel" id="mobilePanel">
-    <div class="wrap">
-      <ul>
-        <li><a href="#home" data-route="home">Home</a></li>
-        <li><a href="#about" data-route="about">About</a></li>
-        <li><a href="#work" data-route="work">Work</a></li>
-        <li><a href="#articles" data-route="articles">Articles</a></li>
-        <li><a href="#contact" data-route="contact">Contact</a></li>
-      </ul>
-      <a class="talk-btn btn-primary" href="mailto:hello@gilbertgo.com?subject=Let%27s%20talk">Let's talk</a>
-    </div>
-  </div>
-</header>
-
-<main id="main">
-
-  <!-- ============ HOME ============ -->
-  <section class="view is-active" id="view-home" data-view="home">
-    <div class="wrap hero">
-      <p class="mono top-eyebrow">Digital marketing infrastructure</p>
-      <h1>I build the systems marketing teams scale on.</h1>
-      <p class="lede">I'm Gilbert — I design and wire up the CRM flows, email automation, ad infrastructure, and LinkedIn pipelines that turn a marketing team's ideas into something that runs on its own. Less duct tape, more architecture.</p>
-
-      <div class="btn-row">
-        <a href="#work" class="btn btn-primary" data-route="work">See the work</a>
-        <a href="mailto:hello@gilbertgo.com?subject=Let%27s%20talk" class="btn btn-ghost">Let's talk</a>
-      </div>
-
-      <div class="stat-row">
-        <div class="stat">
-          <div class="num"><span class="counter" data-target="60">0</span>+</div>
-          <div class="lbl">Clients served across SaaS, e-commerce, and agencies</div>
-        </div>
-        <div class="stat">
-          <div class="num"><span class="counter" data-target="7">0</span></div>
-          <div class="lbl">Years building marketing systems, remote-first</div>
-        </div>
-        <div class="stat">
-          <div class="num"><span class="counter" data-target="200">0</span>+</div>
-          <div class="lbl">Automations shipped that are still running today</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="marquee-band" aria-hidden="true">
-      <div class="marquee-track">
-        <span>CRM Architecture</span><span>Advertising Ops</span><span>Email Automation</span><span>Paid Ads</span><span>LinkedIn Systems</span><span>Mentorship</span>
-        <span>CRM Architecture</span><span>Advertising Ops</span><span>Email Automation</span><span>Paid Ads</span><span>LinkedIn Systems</span><span>Mentorship</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ ABOUT ============ -->
-  <section class="view section-alt" id="view-about" data-view="about">
-    <div class="wrap">
-      <div class="node-label"><span class="dot"></span><span class="line"></span><span class="txt">About</span></div>
-      <div class="about-grid">
-        <div class="about-copy">
-          <h2 style="font-size:1.9rem;">The infrastructure work nobody sees — until it breaks.</h2>
-          <p>I got into marketing through the back door: fixing a client's CRM that was quietly losing leads between form fill and follow-up. That gap — between what a marketing team thinks is happening and what their tools are actually doing — is where I've spent most of my career.</p>
-          <p>Today I work with founders, marketing leads, and agencies who've outgrown manual follow-up and spreadsheet attribution. I map how leads actually move through their stack, then rebuild the CRM, email, ad, and outbound systems so that growth doesn't depend on someone remembering to send a reminder.</p>
-          <p>I work fully remote, across time zones, and I keep a small number of active engagements at a time so nothing I build gets left half-wired.</p>
-
-          <ul class="values">
-            <li><span class="k">01</span><div class="v"><strong>Systems before tactics</strong><span>A great ad or email underperforms if the infrastructure behind it is broken.</span></div></li>
-            <li><span class="k">02</span><div class="v"><strong>Boring is the goal</strong><span>The best automation is one nobody has to think about again.</span></div></li>
-            <li><span class="k">03</span><div class="v"><strong>Documented, not tribal</strong><span>Every system I build comes with a map so your team isn't locked out of it.</span></div></li>
-          </ul>
-        </div>
-
-        <div class="avatar-wrap">
-          <!-- Replace this placeholder with: <img class="avatar-photo" src="your-photo.jpg" alt="Gilbert"> -->
-          <div class="avatar-placeholder" role="img" aria-label="Photo placeholder for Gilbert">
-            <span>GO</span>
-          </div>
-          <p class="avatar-note">Placeholder — send a photo and I'll drop it in here.</p>
-
-          <svg class="glyph" viewBox="0 0 260 260" fill="none" aria-hidden="true" style="margin-top:24px;">
-            <circle cx="130" cy="40" r="7" fill="var(--green)"/>
-            <circle cx="40" cy="140" r="7" fill="var(--accent2)"/>
-            <circle cx="220" cy="140" r="7" fill="var(--accent2)"/>
-            <circle cx="80" cy="230" r="7" fill="var(--green)"/>
-            <circle cx="180" cy="230" r="7" fill="var(--green)"/>
-            <path d="M130 47V100M130 100L40 140M130 100L220 140M40 147L80 223M220 147L180 223M80 223L180 230" stroke="var(--border-strong)" stroke-width="1.5"/>
-            <circle cx="130" cy="100" r="10" fill="var(--bg)" stroke="var(--green)" stroke-width="2"/>
-          </svg>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ WORK ============ -->
-  <section class="view" id="view-work" data-view="work">
-    <div class="wrap">
-      <div class="node-label"><span class="dot"></span><span class="line"></span><span class="txt">Selected work</span></div>
-      <h2 style="font-size:1.9rem;max-width:20ch;">Systems built for teams who were done duct-taping it together.</h2>
-
-      <div class="filter-row" role="group" aria-label="Filter work by category">
-        <button class="filter-chip" aria-pressed="true" data-filter="all">All work</button>
-        <button class="filter-chip" aria-pressed="false" data-filter="crm">CRM &amp; Advertising</button>
-        <button class="filter-chip" aria-pressed="false" data-filter="email">Email Automation</button>
-        <button class="filter-chip" aria-pressed="false" data-filter="ads">Ads</button>
-        <button class="filter-chip" aria-pressed="false" data-filter="linkedin">LinkedIn</button>
-        <button class="filter-chip" aria-pressed="false" data-filter="mentorship">Mentorship</button>
-      </div>
-
-      <div class="work-grid" id="workGrid">
-        <div class="work-card" data-cat="crm">
-          <div class="card-cover" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6" cy="6" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="12" cy="18" r="2.4"/><path d="M8 7.4L11 16M16 7.4L13 16M8.4 6H15.6"/></svg></div>
-          <div class="cat">CRM &amp; Advertising</div>
-          <h3>HubSpot-to-ads sync for a DTC skincare brand</h3>
-          <p>Rebuilt the pipeline connecting form fills, CRM stages, and ad audiences so sales follow-up and retargeting fired off the same source of truth.</p>
-          <div class="outcome">Lead-to-call time dropped from <b>3 days to 4 hours</b></div>
-        </div>
-        <div class="work-card" data-cat="crm">
-          <div class="card-cover" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19V5M4 19H20M8 15l3-4 3 3 4-6"/></svg></div>
-          <div class="cat">CRM &amp; Advertising</div>
-          <h3>Attribution rebuild for a 7-figure agency</h3>
-          <p>Untangled duplicate contacts and broken UTMs across three ad platforms and one CRM that had never agreed on a single lead.</p>
-          <div class="outcome">Recovered <b>$40K/month</b> in previously misattributed spend</div>
-        </div>
-        <div class="work-card" data-cat="email">
-          <div class="card-cover" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="5.5" width="17" height="13" rx="1.5"/><path d="M4.5 6.5l7.5 6 7.5-6"/></svg></div>
-          <div class="cat">Email Automation</div>
-          <h3>12-email onboarding flow for a fintech SaaS</h3>
-          <p>Designed a behavior-triggered onboarding sequence that adapts based on which features a new user actually touches in week one.</p>
-          <div class="outcome"><b>31% lift</b> in trial-to-paid conversion</div>
-        </div>
-        <div class="work-card" data-cat="email">
-          <div class="card-cover" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12a9 9 0 1 1 3 6.7"/><path d="M3 12V7M3 12h5"/></svg></div>
-          <div class="cat">Email Automation</div>
-          <h3>Win-back automation for a subscription box brand</h3>
-          <p>Built a churn-prediction-lite flow that flags at-risk subscribers and routes them into a tailored win-back sequence automatically.</p>
-          <div class="outcome"><b>$18K</b> recovered revenue in the first quarter</div>
-        </div>
-        <div class="work-card" data-cat="ads">
-          <div class="card-cover" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.2"/><circle cx="12" cy="12" r="0.6" fill="currentColor"/></svg></div>
-          <div class="cat">Ads</div>
-          <h3>Meta + Google ad infrastructure for a coaching business</h3>
-          <p>Set up a shared conversion-tracking and budget-allocation system so ad spend moved toward whatever channel was actually converting that week.</p>
-          <div class="outcome"><b>3.2x ROAS</b> within 90 days</div>
-        </div>
-        <div class="work-card" data-cat="linkedin">
-          <div class="card-cover" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="4" height="4" rx="0.6"/><rect x="17" y="17" width="4" height="4" rx="0.6"/><path d="M7 6.5C11 8 13 11 17 17"/></svg></div>
-          <div class="cat">LinkedIn</div>
-          <h3>LinkedIn outbound system for a B2B consultancy</h3>
-          <p>Built a semi-automated prospecting and follow-up system that kept outbound personal without eating a founder's whole calendar.</p>
-          <div class="outcome"><b>40+ qualified calls</b> booked in 60 days</div>
-        </div>
-        <div class="work-card" data-cat="mentorship">
-          <div class="card-cover" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8.5" cy="8" r="2.6"/><circle cx="16" cy="9" r="2"/><path d="M3.5 19c0-3 2.2-5 5-5s5 2 5 5M14 19c0-2.2 1.4-4 4-4s4 1.5 4 4"/></svg></div>
-          <div class="cat">Mentorship</div>
-          <h3>1:1 mentorship program for junior marketing ops hires</h3>
-          <p>Ran a quarterly mentorship track for early-career marketing ops hires at two portfolio companies, covering tooling, systems thinking, and career growth.</p>
-          <div class="outcome"><b>6 mentees promoted</b> within a year</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ ARTICLES LIST ============ -->
-  <section class="view section-alt" id="view-articles" data-view="articles">
-    <div class="wrap">
-      <div class="node-label"><span class="dot"></span><span class="line"></span><span class="txt">Articles</span></div>
-      <h2 style="font-size:1.9rem;">Notes on marketing infrastructure.</h2>
-      <div class="article-list" id="articleList"></div>
-    </div>
-  </section>
-
-  <!-- ============ ARTICLE DETAIL ============ -->
-  <section class="view" id="view-article" data-view="article">
-    <div class="wrap">
-      <a href="#articles" class="back-link" data-route="articles">&larr; Back to articles</a>
-      <p class="mono" id="articleDate"></p>
-      <h2 style="font-size:2rem;margin-top:10px;max-width:24ch;" id="articleTitle"></h2>
-      <div class="article-detail-body" id="articleBody"></div>
-    </div>
-  </section>
-
-  <!-- ============ CONTACT ============ -->
-  <section class="view" id="view-contact" data-view="contact">
-    <div class="wrap">
-      <div class="node-label"><span class="dot"></span><span class="line"></span><span class="txt">Contact</span></div>
-      <h2 style="font-size:1.9rem;max-width:20ch;">Have a marketing stack that needs wiring up properly?</h2>
-      <p style="margin-top:14px;color:var(--muted);max-width:52ch;">Tell me a bit about what's breaking or what you're trying to scale, and I'll reply within a day or two.</p>
-
-      <div class="contact-box">
-        <div class="remote-tag"><span class="pulse"></span> Working remotely — available worldwide</div>
-        <h2>Email is the fastest way to reach me</h2>
-        <a class="email-link" href="mailto:hello@gilbertgo.com?subject=Let%27s%20talk">hello@gilbertgo.com</a>
-        <div class="btn-row" style="margin-top:0;">
-          <a class="btn btn-primary" href="mailto:hello@gilbertgo.com?subject=Let%27s%20talk">Send an email</a>
-        </div>
-        <div class="contact-meta">
-          <div><span>Location</span><strong>Remote, worldwide</strong></div>
-          <div><span>Response time</span><strong>1–2 business days</strong></div>
-          <div><span>Availability</span><strong>Limited engagements per quarter</strong></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="logo" viewBox="0 0 350 350"><path d="M175.359 140.461V140.461C175.548 140.288 175.516 140.178 175.264 140.132L168.966 138.987C168.713 138.941 168.713 138.895 168.966 138.85L190.596 134.947C192.893 134.532 195.05 134.914 197.065 136.091L205.744 141.163C206.705 141.724 207.102 142.555 206.937 143.655L206.163 148.8C206.125 149.053 205.988 149.129 205.753 149.027L201.845 147.341C200.996 146.974 200.134 146.94 199.259 147.238L192.64 149.487C191.356 149.924 190.586 150.808 190.329 152.139L189.427 156.83C189.171 158.161 189.309 159.451 189.842 160.698L192.305 166.461C192.954 167.981 193.973 168.292 195.361 167.394L201.674 163.309C203.346 162.227 204.797 160.903 206.026 159.336L220.982 140.276C222.564 138.259 224.577 136.863 227.02 136.086L279.971 119.25C282.414 118.473 284.804 117.559 287.142 116.508L331.78 96.427C332.013 96.3216 332.061 96.377 331.923 96.593L322.408 111.49C321.028 113.65 319.371 115.571 317.436 117.252L305.81 127.356C303.875 129.038 301.667 130.201 299.186 130.846L247.524 144.273C247.276 144.338 247.279 144.349 247.532 144.308L289.267 137.572C291.798 137.164 294.299 136.621 296.771 135.944L325.346 128.117C325.593 128.049 325.631 128.11 325.46 128.301L310.931 144.443C309.378 146.169 307.627 147.664 305.678 148.927L298.817 153.377C296.868 154.641 294.737 155.368 292.423 155.557L241.443 159.731C241.187 159.752 241.187 159.763 241.444 159.764L304.168 160.081C304.424 160.082 304.457 160.169 304.268 160.342L294.512 169.247C292.619 170.975 290.511 172.38 288.186 173.461L278.129 178.138C275.805 179.219 273.37 179.615 270.823 179.327L231.501 174.877C231.246 174.848 231.243 174.864 231.492 174.924L282.694 187.25C282.943 187.31 282.98 187.434 282.806 187.622L281.982 188.514C281.765 188.748 281.511 188.928 281.219 189.055L266.954 195.264C265.295 195.986 263.575 196.512 261.796 196.842L255.531 198.003C253.752 198.332 252.02 198.166 250.336 197.503L218.329 184.915C218.09 184.821 218.077 184.846 218.29 184.989L250.04 206.365C250.253 206.508 250.231 206.59 249.976 206.61L231.64 208.023C229.084 208.22 226.771 207.563 224.701 206.051L206.417 192.697C206.21 192.546 206.187 192.569 206.35 192.768L219.328 208.569C219.674 208.99 219.974 209.443 220.227 209.926L221.32 212.012C221.439 212.239 221.373 212.382 221.124 212.441L220.234 212.651C219.983 212.71 219.734 212.7 219.488 212.621L208.611 209.116C206.372 208.395 204.432 207.19 202.793 205.502L192.651 195.059C192.428 194.83 192.183 194.802 191.915 194.975L190.969 195.586C190.7 195.759 190.55 196.005 190.519 196.323L189.939 202.136C189.814 203.389 190.167 204.488 190.997 205.434L208.88 225.822C210.003 227.102 209.853 228.209 208.428 229.143L203.411 232.43C201.986 233.363 200.793 233.127 199.833 231.72L192.519 221.011C192.374 220.799 192.348 220.813 192.439 221.053L198.055 235.76C198.706 237.464 198.22 238.734 196.599 239.569L190.889 242.51C189.268 243.345 188.194 242.89 187.667 241.144L183.442 227.149C183.368 226.904 183.344 226.909 183.37 227.164L184.936 242.568C185.147 244.646 184.467 246.373 182.895 247.749L177.358 252.593C175.786 253.969 174.214 253.969 172.642 252.593L167.105 247.749C165.533 246.373 164.853 244.646 165.064 242.568L166.63 227.164C166.656 226.909 166.632 226.904 166.558 227.149L162.315 241.206C161.8 242.911 160.757 243.345 159.185 242.51L153.648 239.569C152.076 238.734 151.594 237.479 152.202 235.806L157.567 221.055C157.654 220.814 157.626 220.799 157.481 221.011L150.124 231.784C149.193 233.148 148.014 233.412 146.589 232.577L141.572 229.636C140.147 228.801 139.96 227.746 141.011 226.472L161.29 201.881C161.879 201.166 161.929 200.415 161.439 199.628L159.715 196.857C159.225 196.07 158.635 195.985 157.945 196.604L147.641 205.845C145.732 207.556 143.538 208.736 141.059 209.385L128.875 212.575C128.627 212.64 128.578 212.569 128.729 212.361L141.746 194.385C141.897 194.178 141.868 194.149 141.659 194.298L126.204 205.402C124.123 206.897 121.804 207.553 119.247 207.37L99.7059 205.966C99.4499 205.948 99.4279 205.867 99.6399 205.722L128.186 186.274C128.397 186.129 128.385 186.106 128.148 186.203L99.7349 197.819C97.9996 198.528 96.2136 198.694 94.3769 198.315L87.9089 196.982C86.0723 196.603 84.2973 196.033 82.5839 195.27L67.2859 188.458C67.0513 188.354 67.0576 188.267 67.3049 188.198L115.948 174.616C116.195 174.547 116.191 174.528 115.936 174.559L76.8049 179.303C74.6936 179.559 72.6809 179.224 70.7669 178.298L64.0249 175.038C62.1103 174.113 60.3336 172.973 58.6949 171.618L45.4249 160.648C45.2276 160.485 45.2569 160.401 45.5129 160.398L109.52 159.447C109.777 159.443 109.777 159.431 109.521 159.41L57.8429 155.186C55.3549 154.983 53.0633 154.202 50.9679 152.845L43.5879 148.065C41.4926 146.708 39.6116 145.1 37.9449 143.241L24.5419 128.302C24.3706 128.111 24.4086 128.049 24.6559 128.117L52.9309 135.897C55.4029 136.577 57.9033 137.127 60.4319 137.546L103.112 144.627C103.365 144.669 103.367 144.656 103.12 144.589L49.4889 129.921C47.0163 129.245 44.8219 128.056 42.9059 126.353L31.4849 116.208C29.5689 114.505 27.9373 112.564 26.5899 110.383L18.0739 96.596C17.9393 96.378 17.9889 96.3213 18.2229 96.426L65.0089 117.354C67.3489 118.401 69.7409 119.31 72.1849 120.082L123.159 136.174C125.603 136.946 127.606 138.348 129.168 140.38L141.468 156.38C142.659 157.929 144.031 159.297 145.586 160.482L151.059 164.656C152.614 165.841 154.078 165.739 155.451 164.348L163.828 155.867C164.008 155.684 163.978 155.638 163.738 155.728L156.762 158.344C156.522 158.434 156.483 158.38 156.645 158.181L157.825 156.735C158.108 156.388 158.415 156.062 158.745 155.759L175.359 140.461ZM185.8 139.275C189.1 139.175 192.4 139.575 196.2 140.475C194.1 141.875 192.3 142.475 190.5 142.175C188.7 141.875 187.1 140.775 185.8 139.275ZM196.6 144.575C199.5 143.575 203 143.575 204.7 144.775L204.4 146.075C202.6 145.075 199.9 145.175 197.1 145.975L196.6 144.575ZM148.3 165.975C157.4 170.175 168.5 184.175 175.1 196.075C181.5 182.175 187.6 173.375 195.7 166.875C188.5 175.075 182 187.075 175.1 200.875C168.5 187.575 158.7 174.175 148.3 165.975ZM127.3 154.075C136.3 169.975 149.8 177.375 160.7 189.775C167.2 197.275 172.1 206.775 175.1 214.575C178.7 204.875 184 195.975 190.1 189.275C201.9 176.275 213.7 169.175 223.1 154.075C214.8 171.275 201.9 178.775 192.3 191.375C184.4 201.575 179.6 211.775 175.1 221.075C170.2 209.475 165.1 200.375 158.5 191.975C148.4 179.275 135.2 172.475 127.3 154.075Z" fill-rule="evenodd" clip-rule="evenodd"/></symbol></svg>
+<div id="pre" role="status" aria-label="Loading"><div class="hl"></div><div class="hr"></div>
+<div class="mid"><div class="frame"><img id="me0" alt="Portrait of Gilbert Onyebuchi"></div><div class="badge"><svg aria-hidden="true"><use href="#logo"/></svg></div><div class="nm">Gilbert Onyebuchi</div></div>
+<div class="cnt"><span id="pct">0</span>%</div><button id="skip">Skip intro</button></div>
+<header id="hd"><a class="logo" href="#home" aria-label="Gilbert Onyebuchi, home"><svg style="width:58px;height:58px" aria-hidden="true"><use href="#logo"/></svg></a><a class="lt" href="#contact"><span>Let’s Talk</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></header>
+<main>
+<section class="hero" id="home">
+<div class="hbg"><img id="me2" alt=""></div><div class="veil"></div>
+<svg class="dots" viewBox="0 0 800 800" aria-hidden="true"><g class="d1"><circle cx="400" cy="400" r="385" stroke-width="3.5" stroke-dasharray="0.1 15" opacity=".55"/></g><g class="d2"><circle cx="400" cy="400" r="335" stroke-width="2" stroke-dasharray="14 16" opacity=".4"/></g><g class="d3"><circle cx="400" cy="400" r="285" stroke-width="3" stroke-dasharray="0.1 11" opacity=".6"/><circle class="sat" cx="685" cy="400" r="7"/></g><circle class="rp" cx="400" cy="400" r="230" opacity=".4"/></svg>
+<div class="wrap hc">
+<p class="avail hin"><b></b>Gilbert Onyebuchi</p>
+<h1 id="h1">Marketing systems that turned attention into business growth.</h1>
+<p class="sub hin">Seven years of building lead generation, automation and CRM systems for growing businesses. This is the work and the results behind it.</p>
+<div class="cr hin" data-cr></div>
+<div class="cta hin"><a class="btn" href="#projects">See my work →</a><a class="btn ghost" href="#about">About me</a></div></div>
+<a class="ringw hin" href="#about" aria-label="Scroll to about"><svg class="ring" viewBox="0 0 160 160" aria-hidden="true"><defs><path id="c" d="M80 80m-62 0a62 62 0 1 1 124 0a62 62 0 1 1-124 0"/></defs><text><textPath href="#c" textLength="384" lengthAdjust="spacing">SCROLL TO EXPLORE • MY EXPERIENCE • </textPath></text></svg><span class="arr"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></span></a>
+</section>
+<section id="about" class="wrap">
+<p class="eyebrow" data-r>About</p>
+<p id="lead">I’ve spent my career building the quiet machinery behind growth: the funnels, automations and data flows that turn strangers into customers.</p>
+<div class="ab"><img class="pt" id="me1" data-r alt="Portrait of Gilbert Onyebuchi" width="420" height="525" loading="lazy">
+<div data-r><p>I’m Gilbert Onyebuchi. I started in digital marketing and moved steadily toward the technical side, where strategy meets systems. I’ve worked with startups, retailers and service businesses to map how customers find and buy, then build the automation, CRM and AI workflows that made each step faster and measurable.</p>
+<div class="st"><div><strong>7+</strong><span>Years in the field</span></div><div><strong>120+</strong><span>Systems shipped</span></div><div><strong>40+</strong><span>Businesses served</span></div></div></div></div>
+</section>
+<section id="clients" class="wrap" style="padding-top:0;overflow:hidden">
+<p class="eyebrow" data-r>Clients</p><h2 data-r>Businesses I’ve worked with.</h2>
+<div id="tw" role="group" aria-label="Clients I have worked with"></div>
+</section>
+<section id="projects" class="wrap" style="padding-top:0;padding-bottom:clamp(32px,5vw,64px)">
+<p class="eyebrow" data-r>Selected case studies</p><h2 data-r>What I did, and what it <em>delivered.</em></h2>
+</section>
+<div id="cases"></div>
+<section id="skills" class="wrap" style="overflow:hidden">
+<div class="sk-h" data-r><p class="eyebrow">Skills geared towards growth</p><h2>My core focus<br>aims at growth</h2><a class="btn" href="#contact">Book a Call</a></div>
+<div class="fan" id="fan"></div>
+</section>
 </main>
-
-<footer class="site">
-  <div class="wrap footer-row">
-    <div>
-      <div class="footer-brand">
-        <span class="logo-box" aria-hidden="true">GO</span>
-        <span class="brand-name">Gilbert</span>
-      </div>
-      <p class="footer-tag">Digital marketing infrastructure builder, working remotely with teams worldwide.</p>
-      <div class="social-row">
-        <a href="https://linkedin.com/in/gilbertgo" aria-label="LinkedIn" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 10v7M7 7.2v.01M11 17v-4.5c0-1.5 1-2.5 2.3-2.5S15.5 11 15.5 12.5V17"/></svg>
-        </a>
-        <a href="https://twitter.com/gilbertgo" aria-label="Twitter / X" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 4l16 16M20 4L4 20"/></svg>
-        </a>
-        <a href="mailto:hello@gilbertgo.com" aria-label="Email">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3.5" y="5.5" width="17" height="13" rx="1.5"/><path d="M4.5 6.5l7.5 6 7.5-6"/></svg>
-        </a>
-      </div>
-    </div>
-    <nav class="footer-nav" aria-label="Footer">
-      <a href="#home" data-route="home">Home</a>
-      <a href="#about" data-route="about">About</a>
-      <a href="#work" data-route="work">Work</a>
-      <a href="#articles" data-route="articles">Articles</a>
-      <a href="#contact" data-route="contact">Contact</a>
-    </nav>
-  </div>
-  <div class="wrap footer-bottom">
-    <span>© <span id="year"></span> Gilbert. All rights reserved.</span>
-    <span>Built remotely.</span>
-  </div>
+<footer id="contact"><div class="wrap">
+<h2 class="big" data-r>Gilbert Onyebuchi</h2><p class="ft" data-r>Let’s talk about your next marketing challenge.</p>
+<div class="cr" data-cr></div>
+<p class="cpy" style="margin-top:36px">© 2026 Gilbert Onyebuchi. All rights reserved.</p></div>
+<div id="horse" aria-hidden="true"></div>
 </footer>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
 <script>
+/* ===== EDIT ME ===== */
+const PHOTO='';/* paste an image URL or data: URI of yourself; empty shows a placeholder */
+const EMAIL='hello@yourdomain.com';
+const SOC=[['X','https://x.com','M4 4l16 16M20 4 4 20'],['Instagram','https://instagram.com','M7 3h10a4 4 0 014 4v10a4 4 0 01-4 4H7a4 4 0 01-4-4V7a4 4 0 014-4zM12 8a4 4 0 100 8 4 4 0 000-8zM17.5 6.5v.01'],['YouTube','https://youtube.com','M4 5h16a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V7a2 2 0 012-2zM10 9l5 3-5 3z'],['LinkedIn','https://linkedin.com','M7 10v7M7 7v.01M11 17v-7M11 13a3 3 0 016 0v4']];
+const CLIENTS=[['Northwind Logistics','Logistics','Built a lead engine that lifted qualified leads by 212%.'],['Lumen & Co.','E-commerce','Made email the source of 38% of revenue.'],['Atlas Fintech','Fintech','Cut first response time from 2 days to 4 minutes.'],['Kora Retail','Retail','Unified eleven tools into one CRM.'],['Bluepeak Energy','Energy','Automated quote follow-up for the sales team.'],['Fieldstone Homes','Real estate','Built a lead capture and nurture funnel.'],['Orbit Foods','Food & beverage','Launched lifecycle email for online orders.'],['Meridian Legal','Professional services','Set up a CRM and enquiry routing.'],['Sable Studio','Creative agency','Automated client onboarding and reporting.'],['Nimbus Cloud','Software','Connected product, CRM and billing data.'],['Verde Grocers','Grocery','Segmented loyalty email by purchase habits.'],['Halcyon Travel','Travel','Built abandoned-booking recovery flows.'],['Pinnacle Auto','Automotive','Tracked leads from ad click to showroom visit.'],['Brightpath Edu','Education','Automated student enquiry follow-up.'],['Ember Coffee','Hospitality','Grew subscriptions with a simple email series.']];
+const WORK=[['Northwind Logistics','Helping a logistics leader turn cold traffic into a steady pipeline of qualified buyers','Two years building the funnel, lead scoring and CRM routing behind their B2B growth.',['Funnel rebuilt end to end across five channels','Lead scoring halved sales follow-up time','Every enquiry routed and tracked in HubSpot'],'+212%','Qualified leads in 6 months','#e8b23a','#1d2b2e','Gilbert brings structure to chaos','He turned scattered campaigns into one system we could measure, trust and scale.','Adaeze Nwosu','CEO, Northwind Logistics'],['Lumen & Co.','Helping an e-commerce brand make email its most reliable revenue channel','A lifecycle programme designed around how customers actually buy.',['Welcome, abandonment and win-back flows live in six weeks','Segmentation lifted repeat purchases','Monthly reporting replaced guesswork'],'38%','Of revenue now comes from email','#9db8ff','#2b2f45','He combines speed with sound judgement','Every decision came with data behind it, and results showed within the first month.','Tunde Bakare','CMO, Lumen & Co.'],['Atlas Fintech','Helping a fintech team answer every lead in minutes, not days','An AI workflow that triages, scores and drafts replies for inbound leads.',['AI triage sorts and scores every enquiry','Draft replies reviewed and sent from Slack','Sales focuses only on qualified leads'],'4 min','Average first response, down from 2 days','#ffa3bb','#3a2330','He made AI genuinely useful for us','Not a demo. A working system our team uses every day.','Chioma Eze','Co-Founder & CMO, Atlas Fintech'],['Kora Retail','Helping a retailer replace eleven tools with one clear view of the customer','A full CRM migration with unified reporting for sales and marketing.',['Eleven systems migrated into one CRM','One shared dashboard for sales and marketing','Reporting time cut from days to minutes'],'11 → 1','Tools unified into a single CRM','#86d9a6','#1f3a2b','He brings data to disagreements','That one habit changed how our whole team makes decisions.','Ifeanyi Obi','CEO, Kora Retail']];
+const SK=[['Marketing Automation','Journeys that run follow-up on their own.','zap'],['Lead Generation','Pipelines that fill with the right people.','tgt'],['CRM & Integration','One clean view of every customer.','usr'],['Email & Lifecycle','Messages that nurture and convert.','ml'],['AI Workflows','Smart systems that save hours.','sp']];
+const IC={zap:'M13 2 3 14h9l-1 8 10-12h-9z',tgt:'M12 22a10 10 0 100-20 10 10 0 000 20zM12 18a6 6 0 100-12 6 6 0 000 12zM12 14a2 2 0 100-4 2 2 0 000 4z',usr:'M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM22 21v-2a4 4 0 00-3-3.9M16 3.1a4 4 0 010 7.8',ml:'M3 5h18v14H3zM3 7l9 6 9-6',sp:'M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z'};
+/* =================== */
+const $=(s,c=document)=>c.querySelector(s),$$=(s,c=document)=>[...c.querySelectorAll(s)];
+const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const PH='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400"><rect width="300" height="400" fill="#e9e9e9"/><circle cx="150" cy="150" r="58" fill="#c4c4c4"/><path d="M40 400c0-90 50-140 110-140s110 50 110 140z" fill="#c4c4c4"/></svg>');
+['me0','me1','me2'].forEach(i=>$('#'+i).src=PHOTO||PH);
+const ic=s=>`<a class="so" href="${s[1]}" target="_blank" rel="noopener" aria-label="${s[0]}"><svg viewBox="0 0 24 24"><path d="${s[2]}"/></svg></a>`;
+const cr=`${SOC.slice(0,2).map(ic).join('')}<div class="em"><a href="mailto:${EMAIL}"><span class="so"><svg viewBox="0 0 24 24"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></span><span>${EMAIL}</span></a><button class="cp" aria-label="Copy email address"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button></div>${SOC.slice(2).map(ic).join('')}`;
+$$('[data-cr]').forEach(e=>e.innerHTML=cr);
+$$('.cp').forEach(b=>b.onclick=async()=>{try{await navigator.clipboard.writeText(EMAIL)}catch(e){const t=document.createElement('textarea');t.value=EMAIL;document.body.append(t);t.select();document.execCommand('copy');t.remove()}b.setAttribute('aria-label','Copied');b.style.color='#2fb457';setTimeout(()=>{b.setAttribute('aria-label','Copy email address');b.style.color=''},1600)});
+$('#fan').innerHTML=SK.map((s,i)=>`<article class="fc2" style="--i:${i-2}"><svg class="mk" aria-hidden="true"><use href="#logo"/></svg><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="${IC[s[2]]}"/></svg></span><h3>${s[0]}</h3><p>${s[1]}</p></article>`).join('');
+$('#cases').innerHTML=WORK.map((p,i)=>`<section class="cs" aria-label="${p[0]} case study"><div class="wrap"><div class="ch" data-r><div><div class="flag"><div class="fw" data-c="${p[6]}" data-n="${p[0]}"></div></div><h2 class="cn">${p[0]}</h2><h3 class="hl2">${p[1]}</h3></div><div class="cd"><p>${p[2]}</p><ul class="imp">${p[3].map(x=>`<li>${x}</li>`).join('')}</ul><a class="btn" href="#contact">Learn More</a></div></div><div class="bn"><div class="media" data-r><div class="vis"><div class="art"><div class="sc" data-m="Case study 0${i+1}" style="--a:${p[6]};background:${p[7]}">0${i+1}</div></div></div></div><div class="bc" data-r><div class="mt" style="--a:${p[6]};--b:${p[7]}"><b>${p[4]}</b><span>${p[5]}</span></div><div class="tm"><h4>${p[8]}</h4><p>${p[9]}</p><div class="wh"><span class="av" aria-hidden="true">${p[10].split(' ').map(w=>w[0]).join('')}</span><div><i>${p[10]}</i><small>${p[11]}</small></div></div></div></div></div></div></section>`).join('');
+/* thin-cloth flags: vertical strips ride a travelling wave, with slope shading */
+const FL=[],fio=new IntersectionObserver(es=>es.forEach(e=>e.target._v=e.isIntersecting));
+function Flag(el,src,W,H,right){const N=Math.round(W/4),sw=W/N;el.style.width=W+'px';el.style.height=H+'px';el.innerHTML='';const S=[];
+for(let i=0;i<N;i++){const u=right?1-i/(N-1):i/(N-1),s=document.createElement('div');s.className='fs';s.style.cssText=`left:${(i*sw).toFixed(2)}px;width:${(sw+.7).toFixed(2)}px;height:${H}px`;
+s.innerHTML=`<div class="fi" style="left:${(-i*sw).toFixed(2)}px;width:${W}px;height:${H}px">${src}</div><i class="fd"></i>`;
+if(u>.74){const n=24*(u-.74)/.26;s.style.clipPath=`polygon(evenodd,0 0,100% 0,100% 100%,0 100%,0 0,0 ${50-n}%,100% ${50-n}%,100% ${50+n}%,0 ${50+n}%,0 ${50-n}%)`}
+el.append(s);S.push([s,s.lastChild,u])}
+el._f={S,H,sw};el._amp=1;if(!RM){FL.push(el);fio.observe(el)}return el}
+if(!RM)requestAnimationFrame(function ft(now){requestAnimationFrame(ft);const t=now/1000;
+FL.forEach(el=>{if(!el._v)return;const{S,H,sw}=el._f,A=H*.2*el._amp,Y=S.map(([,,u])=>A*u*(Math.sin(u*5.2-t*4.6)+.4*Math.sin(u*10.5-t*7.3)+.15*Math.sin(u*17-t*11)));
+S.forEach(([s,d],i)=>{const j=Math.min(i+1,S.length-1),sl=(Y[j]-Y[i])/sw;s.style.transform=`translateY(${Y[i].toFixed(2)}px) skewY(${Math.atan(sl).toFixed(4)}rad)`;d.style.opacity=Math.max(0,Math.min(.2,.07+sl*.5)).toFixed(3)})})});
+function lab(el){const x=el.textContent;el.innerHTML=`<span class="bl"><span>${x}</span><span aria-hidden="true">${x}</span></span>`}
+$$('.btn').forEach(lab);$$('.lt>span').forEach(lab);
+$$('.fw').forEach(e=>Flag(e,`<div class="fcnt" style="background:${e.dataset.c}">${e.dataset.n}</div>`,200,46,false));
+const h1=$('#h1');h1.setAttribute('aria-label',h1.textContent);
+h1.innerHTML=h1.textContent.split(' ').map(w=>{const a=w==='growth.';return`<span class="w" aria-hidden="true"><span>${a?'<em>'+w+'</em>':w}</span></span>`}).join(' ');
+const lead=$('#lead');lead.innerHTML=lead.textContent.split(' ').map(w=>`<span class="lw">${w}</span>`).join(' ');
+addEventListener('scroll',()=>$('#hd').classList.toggle('on',scrollY>40),{passive:true});
+let lenis=null;
+/* tornado of clients: hover slows it, click pulls a company into the eye of the storm */
+(function(){const tw=$('#tw'),CL=CLIENTS;
+tw.innerHTML=CL.map((c,i)=>`<button class="ci" data-i="${i}">${c[0]}</button>`).join('')+'<div id="tc" role="dialog" aria-label="Client details"><button class="x" aria-label="Close">×</button><small></small><h3></h3><p></p></div>';
+const els=$$('.ci',tw),tc=$('#tc'),N=els.length,ph=els.map((_,i)=>i*2.399),ks=els.map(()=>0),mw=Math.max(...els.map(e=>e.offsetWidth));
+let on=true,t=0,ts=1,sg=0,sel=-1,hv=-1,last=performance.now();const lp=(a,b,k)=>a+(b-a)*k;
+function pick(i){sel=i;sg=4;els.forEach((e,j)=>e.classList.toggle('s',j===i));const c=CL[i];$('small',tc).textContent=c[1];$('h3',tc).textContent=c[0];$('p',tc).textContent=c[2];tc.classList.add('on')}
+function shut(){if(sel<0)return;sel=-1;sg=2.5;els.forEach(e=>e.classList.remove('s'));tc.classList.remove('on')}
+tw.addEventListener('pointerover',e=>{const b=e.target.closest('.ci');hv=b?+b.dataset.i:-1;els.forEach((q,j)=>q.classList.toggle('h',j===hv))});
+tw.addEventListener('pointerleave',()=>{hv=-1;els.forEach(q=>q.classList.remove('h'))});
+tw.addEventListener('click',e=>{const b=e.target.closest('.ci');if(b)pick(+b.dataset.i);else if(!e.target.closest('#tc')||e.target.closest('.x'))shut()});
+addEventListener('keydown',e=>e.key==='Escape'&&shut());
+function draw(dt){const W=tw.clientWidth,H=tw.clientHeight,rmax=Math.max(30,Math.min(W*.44,W/2-mw*.5-10)),rmin=Math.min(26,W*.05);
+ts+=((sel>=0?.25:hv>=0?.1:1)-ts)*Math.min(1,dt*5);sg=Math.max(0,sg-dt*2.2);if(!RM)t+=dt*(ts+sg);
+els.forEach((e,i)=>{const h=i/(N-1),r=rmin+(rmax-rmin)*Math.pow(1-h,1.35),a=ph[i]+t*(.55+h*1.5),sway=Math.sin(t*.8+h*3.2)*W*.035*h,d=(Math.sin(a)+1)/2;
+let x=W/2+r*Math.cos(a)+sway,y=26+h*(H-60)+r*Math.sin(a)*.17,s=(.62+.5*d)*(.8+.2*(1-h)),o=.3+.7*d,z=Math.round(d*100);
+ks[i]+=((sel===i?1:0)-ks[i])*Math.min(1,dt*7);const k=ks[i];x=lp(x,W/2,k);y=lp(y,H*.34,k);s=lp(s,1.35,k);
+if(sel>=0&&sel!==i)o*=.35;if(hv===i&&sel!==i){s*=1.18;o=1;z=900}if(sel===i){o=1;z=1000}
+e.style.transform=`translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0) translate(-50%,-50%) scale(${s.toFixed(3)})`;e.style.opacity=o.toFixed(2);e.style.zIndex=z;e.style.boxShadow=`0 ${4+d*12}px ${10+d*22}px rgba(0,0,0,${(.06+d*.16).toFixed(2)})`});
+tc.style.top=(H*.34+50)+'px'}
+draw(0);addEventListener('resize',()=>draw(0));
+new IntersectionObserver(q=>{on=q[0].isIntersecting}).observe(tw);
+(function f(n){requestAnimationFrame(f);const dt=Math.min(n-last,50)/1000;last=n;if(!on)return;draw(dt)})(last)})();
+if(window.gsap&&window.ScrollTrigger){
+gsap.registerPlugin(ScrollTrigger);
+if(!RM&&window.Lenis){lenis=new Lenis();lenis.on('scroll',ScrollTrigger.update);gsap.ticker.add(t=>lenis.raf(t*1000))}
+$$('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const t=$(a.getAttribute('href'));if(!t)return;e.preventDefault();lenis?lenis.scrollTo(t):t.scrollIntoView({behavior:RM?'auto':'smooth'})}));
+if(!RM){gsap.set('#h1 .w>span',{yPercent:115});gsap.set('.hin',{opacity:0,y:20});gsap.set('#hd',{opacity:0,y:-20})}
+function heroIn(d){if(RM)return;gsap.timeline({delay:d}).to('#h1 .w>span',{yPercent:0,duration:1.1,ease:'expo.out',stagger:.06}).to('#hd',{opacity:1,y:0,duration:.8,ease:'power3.out'},.1).to('.hin',{opacity:1,y:0,duration:.8,stagger:.1,ease:'power3.out'},.25)}
+function intro(){const pre=$('#pre');let seen=null;try{seen=sessionStorage.getItem('intro')}catch(e){}
+if(seen||RM){pre.remove();heroIn(0);return}
+lenis&&lenis.stop();document.body.style.overflow='hidden';
+let end=false;const o={v:0};
+function out(fast){if(end)return;end=true;try{sessionStorage.setItem('intro','1')}catch(e){}tl.kill();const d=fast?.7:1;
+const x=gsap.timeline({onComplete:()=>{pre.remove();document.body.style.overflow='';lenis&&lenis.start();ScrollTrigger.refresh()}});
+x.to('#pre .mid,#pre .cnt,#skip',{opacity:0,scale:fast?1:1.12,duration:.45*d,ease:'power2.in'})
+.to('#pre .hl',{xPercent:-100,duration:1*d,ease:'expo.inOut'},.3*d).to('#pre .hr',{xPercent:100,duration:1*d,ease:'expo.inOut'},.3*d).add(()=>heroIn(0),.55*d)}
+const tl=gsap.timeline({onComplete:()=>out(false)});
+tl.from('.frame',{clipPath:'inset(100% 0 0 0)',duration:.9,ease:'expo.out'}).from('.badge',{scale:0,duration:.6,ease:'back.out(2)'},.5).from('#pre .nm',{y:20,opacity:0,duration:.6,ease:'power3.out'},.6)
+.to(o,{v:100,duration:1.9,ease:'power2.inOut',onUpdate:()=>{$('#pct').textContent=Math.round(o.v)}},.1);
+$('#skip').onclick=()=>{$('#pct').textContent=100;out(true)}}
+intro();
+if(!RM){
+gsap.utils.toArray('[data-r]').forEach(el=>gsap.from(el,{y:44,opacity:0,duration:.9,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 90%',once:true}}));
+gsap.fromTo('.lw',{opacity:.18},{opacity:1,stagger:.1,ease:'none',scrollTrigger:{trigger:'#lead',start:'top 85%',end:'bottom 50%',scrub:true}});
+$$('.art').forEach(a=>gsap.fromTo(a,{yPercent:-8},{yPercent:8,ease:'none',scrollTrigger:{trigger:a.parentElement,start:'top bottom',end:'bottom top',scrub:true}}));
+}
+document.fonts&&document.fonts.ready.then(()=>ScrollTrigger.refresh());
+}else{const p=$('#pre');p&&p.remove()}
+/* Knight: rigged from the supplied 15-part SVG. Every joint is a real pivot; walk timing comes from the GIF (1.28s cycle). */
 (function(){
-  "use strict";
-
-  var ICONS = {
-    "crm-automation-failure": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6" cy="6" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="12" cy="18" r="2.4"/><path d="M8 7.4L11 16M16 7.4L13 16M8.4 6H15.6"/></svg>',
-    "email-sequence-that-books-calls": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="5.5" width="17" height="13" rx="1.5"/><path d="M4.5 6.5l7.5 6 7.5-6"/></svg>',
-    "linkedin-is-a-pipeline": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="4" height="4" rx="0.6"/><rect x="17" y="17" width="4" height="4" rx="0.6"/><path d="M7 6.5C11 8 13 11 17 17"/></svg>'
-  };
-
-  var ARTICLES = [
-    {
-      slug: "crm-automation-failure",
-      title: "Why most CRMs fail before the first automation ever ships",
-      date: "2026-06-02",
-      excerpt: "The automation isn't the problem. The thing feeding it bad data is.",
-      body: [
-        "Most teams blame their CRM for lead leakage, when the real issue is usually upstream: three different tools each hold a slightly different version of the same contact, and nobody has decided which one wins.",
-        "Before I automate anything, I map every place a lead's data can enter or change: the form, the ad platform, the CRM, the sales rep's notes. Automation applied on top of a messy map just moves the mess faster.",
-        "The fix is rarely a bigger tool. It's usually a smaller number of entry points, one clear owner for each field, and a CRM that's finally allowed to be the single source of truth it was bought to be.",
-        "Once that's true, the automations you add on top — lead scoring, routing, follow-up sequences — start compounding instead of fighting each other."
-      ]
-    },
-    {
-      slug: "email-sequence-that-books-calls",
-      title: "The email sequence that actually books calls",
-      date: "2026-04-18",
-      excerpt: "It's shorter, less clever, and triggered by behavior — not by a calendar.",
-      body: [
-        "The best-performing sequences I've built have almost nothing in common with the polished nurture flows most teams start with. They're shorter, plainer, and triggered by what a lead actually does, not by day 1, day 3, day 7 on a calendar.",
-        "A prospect who opens three pricing emails and never replies needs a different message than one who's gone completely dark. Most automation platforms can branch on that easily — most teams just never set the trigger up.",
-        "I typically build a core flow of four to six emails with two or three behavioral branches, then leave it alone for a month before touching subject lines. Volume of tweaks isn't what moves booked calls — the trigger logic is.",
-        "If your sequence hasn't changed its branching logic in the last six months, that's usually the highest-leverage place to look before writing a single new email."
-      ]
-    },
-    {
-      slug: "linkedin-is-a-pipeline",
-      title: "LinkedIn isn't a content channel. It's a pipeline.",
-      date: "2026-02-09",
-      excerpt: "Treat outbound like infrastructure and it stops depending on your mood that day.",
-      body: [
-        "Most B2B founders treat LinkedIn as a place to post and hope. The ones getting consistent calls booked treat it as a pipeline with stages, just like a CRM: identify, engage, qualify, book.",
-        "That means defining who counts as a fit before you ever send a message, building a short list of engagement triggers (a comment, a shared post, a mutual connection) instead of cold-opening every message, and tracking reply rates the same way you'd track email open rates.",
-        "None of this requires full automation, and I'd argue it shouldn't be fully automated — the personal part is the point. What it needs is structure, so outbound doesn't live entirely in one founder's head and disappear the week they're busy.",
-        "Once it's structured, it's also delegable. That's usually the real goal: a system a hire can run, not a habit only the founder can keep up."
-      ]
-    }
-  ];
-
-  var els = {
-    views: document.querySelectorAll(".view"),
-    navLinks: document.querySelectorAll("[data-route]"),
-    menuToggle: document.getElementById("menuToggle"),
-    mobilePanel: document.getElementById("mobilePanel"),
-    articleList: document.getElementById("articleList"),
-    articleTitle: document.getElementById("articleTitle"),
-    articleDate: document.getElementById("articleDate"),
-    articleBody: document.getElementById("articleBody")
-  };
-
-  function renderArticleList(){
-    els.articleList.innerHTML = ARTICLES.map(function(a){
-      var d = new Date(a.date);
-      var dateStr = d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-      return '<a class="article-row" href="#articles/' + a.slug + '">' +
-        '<div class="card-cover" aria-hidden="true">' + (ICONS[a.slug] || "") + '</div>' +
-        '<span class="date">' + dateStr + '</span>' +
-        '<span class="body"><h3>' + a.title + '</h3><p>' + a.excerpt + '</p>' +
-        '<span class="read">Read the full article &rarr;</span></span>' +
-      '</a>';
-    }).join("");
-  }
-
-  function renderArticle(slug){
-    var a = ARTICLES.filter(function(x){ return x.slug === slug; })[0];
-    if(!a){ return false; }
-    var d = new Date(a.date);
-    els.articleDate.textContent = d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
-    els.articleTitle.textContent = a.title;
-    var cover = '<div class="card-cover" aria-hidden="true">' + (ICONS[a.slug] || "") + '</div>';
-    els.articleBody.innerHTML = cover + a.body.map(function(p){ return "<p>" + p + "</p>"; }).join("");
-    return true;
-  }
-
-  function setActiveView(name){
-    els.views.forEach(function(v){
-      v.classList.toggle("is-active", v.getAttribute("data-view") === name);
-    });
-    els.navLinks.forEach(function(l){
-      if(l.getAttribute("data-route") === name){
-        l.setAttribute("aria-current", "page");
-      } else {
-        l.removeAttribute("aria-current");
-      }
-    });
-  }
-
-  function route(){
-    var hash = window.location.hash.replace(/^#/, "") || "home";
-    var parts = hash.split("/");
-    var top = parts[0];
-
-    if(top === "articles" && parts[1]){
-      var ok = renderArticle(decodeURIComponent(parts[1]));
-      setActiveView(ok ? "article" : "articles");
-    } else if(["home","about","work","articles","contact"].indexOf(top) !== -1){
-      setActiveView(top);
-    } else {
-      setActiveView("home");
-    }
-    closeMobileMenu();
-    window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
-  }
-
-  function openMobileMenu(){
-    els.mobilePanel.classList.add("is-open");
-    els.menuToggle.setAttribute("aria-expanded", "true");
-    els.menuToggle.setAttribute("aria-label", "Close menu");
-  }
-  function closeMobileMenu(){
-    els.mobilePanel.classList.remove("is-open");
-    els.menuToggle.setAttribute("aria-expanded", "false");
-    els.menuToggle.setAttribute("aria-label", "Open menu");
-  }
-  els.menuToggle.addEventListener("click", function(){
-    var isOpen = els.mobilePanel.classList.contains("is-open");
-    isOpen ? closeMobileMenu() : openMobileMenu();
-  });
-  document.addEventListener("keydown", function(e){
-    if(e.key === "Escape") closeMobileMenu();
-  });
-
-  // Work filter
-  var chips = document.querySelectorAll(".filter-chip");
-  var cards = document.querySelectorAll(".work-card");
-  chips.forEach(function(chip){
-    chip.addEventListener("click", function(){
-      chips.forEach(function(c){ c.setAttribute("aria-pressed","false"); });
-      chip.setAttribute("aria-pressed","true");
-      var f = chip.getAttribute("data-filter");
-      cards.forEach(function(card){
-        var show = f === "all" || card.getAttribute("data-cat") === f;
-        card.hidden = !show;
-      });
-    });
-  });
-
-  // Counters
-  var counted = false;
-  function animateCounters(){
-    if(counted) return;
-    counted = true;
-    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    document.querySelectorAll(".counter").forEach(function(el){
-      var target = parseInt(el.getAttribute("data-target"), 10) || 0;
-      if(reduced){ el.textContent = target; return; }
-      var start = null, dur = 1100;
-      function step(ts){
-        if(!start) start = ts;
-        var p = Math.min((ts - start) / dur, 1);
-        el.textContent = Math.floor(p * target);
-        if(p < 1) requestAnimationFrame(step); else el.textContent = target;
-      }
-      requestAnimationFrame(step);
-    });
-  }
-  var heroObserver = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){ if(e.isIntersecting) animateCounters(); });
-  }, { threshold: 0.4 });
-  var statRow = document.querySelector(".stat-row");
-  if(statRow) heroObserver.observe(statRow);
-
-  document.getElementById("year").textContent = new Date().getFullYear();
-
-  renderArticleList();
-  window.addEventListener("hashchange", route);
-  route();
-})();
+const box=$('#horse'),PARTS=[["M240.2 481.4C230.6 466.9 218.1 446.4 218.7 446.4C220.0 446.4 246.9 486.4 247.6 489.5C247.9 491.4 248.3 493.2 248.1 493.2C248.0 493.3 244.4 488.0 240.2 481.4ZM125.6 472.6C125.1 472.3 124.8 470.8 124.9 469.6C124.9 467.4 125.0 467.4 126.0 469.9C127.1 472.6 126.9 474.0 125.6 472.6ZM215.0 441.1C214.1 439.5 213.6 433.4 213.7 424.2L214.0 409.9L215.4 425.6C217.1 442.5 217.0 444.9 215.0 441.1ZM220.9 304.6C211.6 304.1 190.3 302.1 173.5 300.1L142.9 296.4L147.3 291.7C153.0 285.4 153.6 282.9 150.8 274.9C147.7 266.5 147.7 266.5 146.1 273.4C143.0 287.7 139.8 293.7 134.9 294.8C134.0 295.0 131.7 296.5 129.8 298.3C126.7 301.1 122.8 303.1 122.1 302.2C121.9 302.1 122.3 296.7 123.0 290.4L124.2 279.0L133.7 268.2C138.8 262.3 143.4 257.5 143.9 257.5C144.3 257.5 144.7 256.8 144.7 256.1C144.7 255.3 149.6 241.5 155.6 225.3L166.5 196.0L163.0 182.1C161.1 174.6 159.6 168.2 159.9 168.1C160.1 167.8 164.2 171.1 169.2 175.4C174.0 179.5 178.6 182.8 179.3 182.6C181.0 182.0 209.9 174.3 210.5 174.3C210.7 174.3 210.7 186.1 210.5 200.3L210.0 226.6L229.4 236.1L248.7 245.7L256.6 261.4C261.0 270.1 264.9 277.4 265.3 277.7C265.8 278.1 266.6 281.8 266.9 286.2C267.4 290.5 267.9 296.7 268.3 300.0L268.8 305.8L253.3 305.7C244.8 305.6 230.3 305.2 220.9 304.6Z","M240.2 481.4C230.6 466.9 218.1 446.4 218.7 446.4C220.0 446.4 246.9 486.4 247.6 489.5C247.9 491.4 248.3 493.2 248.1 493.2C248.0 493.3 244.4 488.0 240.2 481.4ZM125.6 472.6C125.1 472.3 124.8 470.8 124.9 469.6C124.9 467.4 125.0 467.4 126.0 469.9C127.1 472.6 126.9 474.0 125.6 472.6ZM215.0 441.1C214.1 439.5 213.6 433.4 213.7 424.2L214.0 409.9L215.4 425.6C217.1 442.5 217.0 444.9 215.0 441.1ZM228.4 304.7L218.8 304.1L225.0 302.0C233.7 298.9 244.9 293.6 242.7 293.5C241.3 293.5 228.4 297.6 219.8 300.8C218.0 301.6 217.8 301.4 219.0 300.1C221.4 297.5 220.5 296.6 216.1 297.3C210.6 298.3 212.3 297.1 226.4 290.0C238.5 284.0 238.9 283.1 227.9 286.8C213.7 291.6 198.8 299.3 199.4 301.6C199.9 303.4 199.4 303.6 197.0 303.1C193.0 302.3 188.9 301.9 173.7 300.2C165.4 299.2 159.9 298.1 156.9 296.4C153.7 294.7 152.4 294.4 152.1 295.5C151.8 296.3 149.6 296.8 147.0 296.8H142.4L147.0 291.9C153.0 285.4 153.6 282.9 150.8 274.9C147.7 266.5 147.7 266.5 146.1 273.4C143.0 287.7 139.8 293.7 134.9 294.8C134.0 295.0 131.7 296.5 129.8 298.3C126.7 301.1 122.8 303.1 122.1 302.2C121.2 301.3 124.4 279.1 125.6 277.6C129.5 272.9 140.0 261.1 142.4 258.8C143.9 257.5 144.9 256.4 144.6 256.4C144.2 256.4 144.6 254.8 145.1 253.0C146.5 249.3 148.4 248.5 148.5 251.6C148.5 252.6 149.7 256.1 151.3 259.2C152.8 262.2 153.8 264.0 153.6 263.0C153.3 262.1 152.3 257.1 151.2 252.0C148.2 236.7 151.3 235.0 154.7 250.1C156.7 258.8 160.7 270.7 161.8 271.4C163.1 272.3 157.6 240.4 155.6 236.0C154.6 233.7 154.0 230.9 154.2 229.8C155.1 225.5 160.5 239.0 163.5 252.6C166.2 265.6 170.5 279.5 171.6 278.5C171.8 278.3 171.2 270.6 170.1 261.5C168.3 245.3 168.6 233.5 171.6 216.4C172.0 213.6 171.3 212.3 167.7 208.6C163.5 204.1 163.5 204.1 165.0 200.1L166.6 196.2L170.9 201.0L175.3 205.9L179.7 203.0C184.2 200.2 208.6 187.8 209.7 187.8C210.0 187.8 210.1 190.9 210.1 194.7C210.0 198.7 209.7 200.5 209.5 198.8C209.2 197.0 208.7 195.6 208.3 195.6C206.2 195.6 178.5 211.9 176.7 214.2C174.4 217.2 171.4 238.2 172.1 246.8L172.6 251.3L177.1 242.9C181.1 235.3 204.2 209.1 206.8 209.1C207.9 209.1 210.2 218.7 210.2 223.1C210.2 225.9 210.8 227.1 212.4 227.7C213.5 228.0 215.9 230.3 217.6 232.7C224.1 242.1 234.2 249.5 242.9 251.3C246.5 252.0 246.2 251.7 240.2 247.9C232.7 243.4 222.6 235.1 222.6 233.6C222.6 233.2 228.6 235.7 235.9 239.4L249.0 246.0L256.9 261.9C261.2 270.6 265.1 277.7 265.5 277.7C265.9 277.7 266.6 281.7 267.0 286.5C267.4 291.2 267.9 297.5 268.3 300.4L268.9 305.7L253.3 305.5C244.8 305.5 233.5 305.0 228.4 304.7ZM185.1 292.5C193.9 286.6 209.7 278.8 222.1 274.3C227.6 272.3 232.4 270.4 232.7 270.1C234.2 268.6 222.5 271.4 215.0 274.3C204.5 278.4 203.6 278.1 212.4 273.3C216.1 271.4 219.5 269.3 219.8 268.6C221.9 265.3 190.5 282.1 182.5 288.5C176.7 293.2 177.3 293.4 171.0 287.3C164.6 281.1 158.3 276.5 157.5 277.2C156.7 278.1 175.6 296.8 177.2 296.8C178.0 296.8 181.5 294.8 185.1 292.5ZM193.4 250.7C195.2 243.2 200.5 232.1 204.2 228.1C207.1 225.1 207.9 220.4 205.4 220.4C201.1 220.4 191.7 234.4 188.9 245.1C187.0 251.9 187.1 265.9 189.0 272.1L190.5 277.2L191.1 267.0C191.6 261.5 192.5 254.1 193.4 250.7ZM209.3 250.1C211.0 247.7 213.3 244.7 214.2 243.3C215.6 241.4 215.6 240.7 214.3 238.9C210.5 233.6 201.4 250.1 200.6 264.0L200.0 272.7L203.2 263.5C204.8 258.6 207.7 252.5 209.3 250.1ZM226.0 250.7C224.0 249.5 222.1 251.0 217.9 257.4C213.1 265.1 214.1 265.3 221.3 258.3C226.4 253.1 227.3 251.6 226.0 250.7ZM158.5 222.6C157.8 221.3 157.5 219.9 157.7 219.6C158.1 219.4 159.0 220.1 159.6 221.5C160.3 222.8 160.7 224.2 160.4 224.5C160.1 224.8 159.2 224.0 158.5 222.6ZM175.4 198.1C175.4 197.1 176.1 195.3 176.8 194.3C178.2 192.6 178.4 192.6 179.8 194.7C180.8 196.4 180.8 197.3 179.8 198.5C178.0 200.8 175.4 200.6 175.4 198.1ZM168.4 191.7C165.1 188.4 164.0 186.1 162.0 178.1C160.7 172.7 159.6 168.2 159.9 168.1C160.1 167.8 164.2 171.1 169.2 175.4C174.0 179.5 178.6 182.8 179.3 182.6C181.5 181.8 210.0 174.3 210.7 174.3C211.0 174.3 211.4 175.2 211.4 176.4C211.4 178.8 207.2 180.8 189.7 186.7L178.6 190.6L172.1 183.4L165.5 176.3L164.7 179.7C163.8 183.8 165.0 186.4 170.2 190.9C172.5 192.8 173.8 194.6 173.4 195C172.8 195.3 170.5 193.8 168.4 191.7ZM186.6 194.4C192.5 190.5 210.2 182.4 210.2 183.6C210.2 184.5 205.0 187.5 198.5 190.3C187.3 195.4 183.0 196.9 186.6 194.4Z"],["M208.0 479.0C208.0 477.8 208.4 476.8 209.0 476.8C209.6 476.8 209.8 477.8 209.5 479.0C209.1 480.3 208.7 481.3 208.4 481.3C208.2 481.3 208.0 480.3 208.0 479.0ZM211.6 456.0C211.6 454.1 211.8 453.5 212.2 454.6C212.4 455.6 212.4 457.2 212.2 458.0C211.8 458.7 211.6 457.9 211.6 456.0ZM211.4 414.0C211.4 396.6 211.3 395.0 209.1 393.2C207.9 392.2 206.6 391.3 206.4 391.3C206.2 391.3 206.0 399.5 205.9 409.5C205.7 419.5 205.4 428.0 205.2 428.2C205.0 428.4 197.0 423.8 187.5 417.7C171.0 407.3 170.2 406.8 165.4 407.5L160.5 408.2L161.2 399.4L162.0 390.7L159.1 393.9C156.8 396.5 156.3 398.2 156.3 403.0V409.1L142.5 411.5C134.9 412.9 126.7 414.5 124.2 414.9C118.6 416.2 118.8 416.4 120.2 408.6C120.8 405.0 121.4 400.4 121.4 398.4V394.6L116.2 395.3L111.1 396.1L114.8 389.7C117.7 384.4 122.5 369.9 122.5 366.3C122.5 365.9 121.5 365.4 120.2 365.4C118.4 365.4 118.0 365.0 118.6 363.4C119.0 362.4 120.1 359.2 120.8 356.4C123.1 348.3 127.8 336.2 132.1 328.1C134.7 323.2 136.0 319.0 136.0 316.0C136.0 312.7 136.9 310.1 139.4 306.8C141.8 303.5 142.5 301.4 142.1 299.5C141.0 295.1 143.6 295.1 174.7 298.9C203.9 302.5 236.3 304.7 258.4 304.7C269.5 304.7 269.8 304.8 269.8 307.2C269.8 308.6 270.2 312.4 270.5 315.5C271.2 320.5 271.0 321.4 269.2 321.8C267.8 322.1 265.3 326.0 262.4 332.4L257.9 342.5L263.2 356.7C268.5 371.2 270.2 377.8 268.5 377.8C267.9 377.8 264.2 374.8 260.3 371.1C252.3 363.6 247.7 361.7 252.1 367.8C254.7 371.2 266.9 381.2 268.7 381.2C269.2 381.2 269.8 382.2 270.2 383.4C270.7 385.5 270.2 385.7 265.9 385.7C260.6 385.7 257.3 382.8 245.9 368.1C240.9 361.8 233.6 356.2 232.2 357.7C231.0 358.8 240.6 372.3 247.7 379.5L254.7 386.7L251.3 387.1C247.2 387.8 246.3 386.8 238.1 373.5C235.0 368.5 232.2 364.5 231.9 364.8C231.4 365.3 238.4 378.9 241.7 384.1L244.0 387.6L239.3 388.3C236.6 388.6 229.7 389.3 224.0 389.7L213.5 390.5L214.1 395.1C215.9 409.2 215.2 432.9 213.1 432.9C211.6 432.9 211.4 430.1 211.4 414.0ZM113.5 429.1C113.5 428.9 114.2 427.3 115.1 425.7C116.6 422.8 116.7 422.8 117.2 425.1C117.6 426.6 117.7 428.1 117.4 428.6C116.8 429.5 113.5 430.0 113.5 429.1ZM131.1 295.1C131.5 294.2 132.4 293.5 133.3 293.5C135.5 293.5 135.3 295.3 133.1 296.2C130.6 297.2 130.4 297.1 131.1 295.1Z","M208.0 479.0C208.0 477.8 208.4 476.8 209.0 476.8C209.6 476.8 209.8 477.8 209.5 479.0C209.1 480.3 208.7 481.3 208.4 481.3C208.2 481.3 208.0 480.3 208.0 479.0ZM211.6 456.0C211.6 454.1 211.8 453.5 212.2 454.6C212.4 455.6 212.4 457.2 212.2 458.0C211.8 458.7 211.6 457.9 211.6 456.0ZM211.4 414.0C211.4 396.6 211.3 395.0 209.1 393.2C207.9 392.2 206.6 391.3 206.4 391.3C206.2 391.3 206.0 399.5 205.9 409.5C205.6 428.6 205.6 429.1 203.4 427.8C202.4 427.2 202.3 422.5 202.7 409.0C203.3 390.2 202.5 383.9 198.2 374.7C196.2 370.5 196.2 370.6 195.6 396.9C195.2 419.3 194.8 422.9 193.6 420.2C192.7 418.0 192.3 409.2 192.3 389.7C192.3 363.2 190.9 350.8 188.0 350.8C184.9 350.8 184.6 354.2 185.2 384.7C185.8 413.6 185.7 416.0 184.0 415.4C182.4 414.8 182.1 411.8 182.1 388.0C182.1 361.7 181.5 356.8 178.1 355.7C175.4 354.8 174.3 364.3 174.3 386.8C174.3 406.9 174.0 409.4 172.6 408.2C171.2 407.0 170.9 403.3 170.8 389.2V371.6L167.8 377.8C165.3 383.0 164.8 385.9 164.4 396.0C164.0 406.0 163.6 408.2 162.2 408.2C160.8 408.2 160.7 406.8 161.2 399.4L162.0 390.7L159.1 393.9C156.8 396.5 156.3 398.2 156.3 403.1V409.1L145.9 411.0C140.2 412.0 134.4 413.1 133.2 413.5C131.7 413.9 132.6 412.2 136.2 408.3C139.1 405.1 142.8 400.3 144.3 397.6C147.3 392.5 152.8 379.0 150.3 382.8C149.6 383.9 146.0 389.2 142.5 394.6C134.9 406.1 127.0 414.5 122.8 415.3C118.7 416.0 118.8 416.2 120.2 408.6C120.8 405.0 121.4 400.4 121.4 398.4V394.6L116.2 395.3L111.1 396.1L114.8 389.7C117.7 384.4 122.5 369.9 122.5 366.3C122.5 365.9 121.5 365.4 120.2 365.4C118.4 365.4 118.0 365.0 118.6 363.4C119.0 362.4 120.1 359.2 120.8 356.4C123.1 348.3 127.8 336.2 132.1 328.1C134.7 323.0 136.0 319.0 136.0 316.0C136.0 312.6 136.9 310.1 139.1 307.3C140.9 304.9 142.1 301.8 142.2 299.8C142.2 296.5 142.5 296.3 146.7 295.9C150.5 295.7 151.4 296.0 152.4 298.4C153.7 301.0 153.6 301.1 150.9 300.1C143.0 297.1 150.2 304.8 160.0 309.9C164.7 312.4 165.3 312.5 164.2 310.6C163.7 309.4 163.2 306.8 163.2 304.7C163.4 302.0 162.6 300.3 160.7 298.7L158.0 296.5L160.8 297.2C162.3 297.5 169.3 298.4 176.3 299.2C183.1 300.0 188.9 300.9 188.9 301.3C188.9 301.8 186.4 303.7 183.3 305.7L177.6 309.3L174.4 307.1C170.3 304.1 169.8 304.1 169.8 307.0C169.8 308.2 171.7 311.3 173.9 313.8C178.1 318.3 178.2 318.4 178.8 315.8C179.2 314.3 181.8 311.6 185.3 309.2C189.3 306.5 191.0 304.7 190.7 303.4C190.3 301.8 190.9 301.3 193.7 301.3C200.2 301.3 201.4 303.7 198.4 310.8C197.6 312.6 197.9 312.8 199.7 312.0C220.9 303.1 221.0 303.1 238.0 304.1L252.2 304.9L238.8 309.9C220.0 316.6 220.1 316.6 221.0 313.1C221.8 309.8 221.4 309.8 213.5 312.5C200.5 317.0 200.2 317.3 202.5 325.3L203.6 329.4L207.2 326.7C209.2 325.3 218.7 320.9 228.2 317.1C237.8 313.3 247.9 309.0 250.6 307.4C257.6 303.6 269.8 303.5 269.8 307.2C269.8 308.6 270.2 312.5 270.5 315.7C271.2 320.7 271.0 321.6 269.4 321.6C268.3 321.6 266.6 323.7 265.0 327.0C263.7 329.9 261.9 332.8 261.2 333.4C259.6 334.6 254.1 347.8 254.8 348.5C255.0 348.8 255.9 348.0 256.8 346.9C258.5 344.5 258.7 344.9 261.9 353.1C263.1 356.4 263.9 360.3 263.5 361.7C263.1 363.5 263.3 364.3 264.4 364.3C265.9 364.3 267.7 368.5 269.2 375.3C270.0 379.2 268.2 378.4 260.3 371.1C252.3 363.6 247.7 361.7 252.1 367.8C254.7 371.2 266.9 381.2 268.7 381.2C269.2 381.2 269.8 382.2 270.2 383.4C270.7 385.5 270.2 385.7 265.9 385.7C260.6 385.7 257.3 382.8 245.9 368.1C240.9 361.8 233.6 356.2 232.2 357.7C231.0 358.8 240.6 372.3 247.7 379.5L254.7 386.7L251.3 387.1C247.2 387.8 246.5 386.9 236.3 370.7C232.5 364.4 229.4 359.7 229.4 360.1C229.4 361.4 239.0 380.2 241.6 384.0L244.0 387.4L240.3 387.9C236.1 388.6 222.4 379.4 218.0 373.0C216.8 370.9 216.0 370.4 216.5 371.6C217.0 372.9 217.6 375.6 217.9 377.6C218.3 381.3 226.0 387.6 230.5 388.0C233.9 388.4 225.3 390 219.5 390.1L213.5 390.2L214.1 394.9C215.9 409.2 215.3 432.9 213.1 432.9C211.6 432.9 211.4 430.1 211.4 414.0ZM113.5 429.1C113.5 428.9 114.2 427.3 115.1 425.7C116.6 422.8 116.7 422.8 117.2 425.1C117.6 426.6 117.7 428.1 117.4 428.6C116.8 429.5 113.5 430.0 113.5 429.1ZM137.9 390.9C143.3 383.7 151.8 367.3 151.8 364.4C151.8 362.6 151.0 363.7 143.8 375.9C141.6 379.5 136.8 386.0 132.9 390.3C125.1 399.1 123.1 404.7 129.4 400.2C131.3 398.8 135.2 394.7 137.9 390.9ZM132.3 378.4C135.3 375.0 138.9 370.0 140.4 367.5L142.9 362.6L140.4 366.0C138.9 367.9 134.3 373.0 130.2 377.4C126.0 381.7 122.5 385.7 122.5 386.1C122.5 387.8 127.1 384.2 132.3 378.4ZM229.8 376.5C225.1 368.5 216.4 357.8 216.1 359.7C215.5 363.1 219.8 370.4 224.5 374.3C228.9 377.9 231.3 378.8 229.8 376.5ZM205.5 341.5C204.3 339.3 203.9 340.4 203.5 350.3L202.9 361.5L201.5 355.3C198.1 340.7 197.9 340.2 196.2 342.5C195.3 343.7 194.5 345.5 194.5 346.5C194.5 348.5 203.7 373.3 205.4 375.9C207.0 378.4 207.1 344.3 205.5 341.5ZM167.5 360.7C170.9 351.8 171.1 350.5 169.8 347.8L168.3 344.6L166.7 350.3C164.1 359.6 163.6 359.6 163.2 350.6C162.9 341.5 161.2 338.7 160.5 346.1C160.3 348.3 160.3 356.1 160.5 363.2C161.0 377.9 161.1 377.9 167.5 360.7ZM130.6 371.3C135.0 366.6 137.7 362.1 136.0 362.1C134.0 362.1 125.9 370.5 125.9 372.6C125.9 375.2 127.4 374.9 130.6 371.3ZM134.8 353.5C146.5 347.0 154.0 340.7 154.0 337.3C153.9 336.1 153.7 336.2 152.8 337.8C151.9 339.2 151.3 339.5 150.6 338.4C150.1 337.5 148.8 337.8 146.0 339.5C143.9 340.8 141.4 341.8 140.4 341.8C139.4 341.8 137.3 342.9 135.7 344.3C134.1 345.8 131.6 347.8 130.2 348.9L127.6 350.9L130.4 350.1L133.2 349.5L130.7 351.4C128.0 353.3 125.2 357.6 126.6 357.6C127.0 357.6 130.7 355.8 134.8 353.5ZM248.6 353.5C245.3 352.1 242.2 350.8 241.6 350.8C241.2 350.8 240.4 350.3 240.0 349.6C239.5 348.8 240.6 348.7 243.3 349.1C248.6 350.1 248.5 349.0 243.0 346.8C240.6 345.9 238.4 344.2 238.0 343.1C237.7 341.5 236.0 340.9 230.8 340.5C227.1 340.1 222.4 339.0 220.4 337.9C217.3 336.3 216.5 336.3 215.8 337.5C215.1 338.7 214.5 338.6 213.2 336.8C211.7 335.0 211.5 334.8 211.4 336.3C211.4 340.7 243.1 356.4 251.9 356.3C254.0 356.3 253.2 355.7 248.6 353.5ZM188.3 337.3C192.6 333.0 195.7 329.4 195.2 329.4C193.9 329.4 184.2 337.3 182.9 339.2C181.5 341.6 179.4 340.9 175.3 336.6C171.0 332.3 166.6 329.2 168.2 331.9C169.6 334.4 179.1 345.2 179.9 345.2C180.2 345.2 184.0 341.6 188.3 337.3ZM146.3 332.7C150.0 328.7 149.7 328.0 143.9 325L139.5 322.7L136.6 325.7C134.1 328.5 134.0 328.9 135.8 329.6C136.8 330.0 138.0 330.1 138.5 329.8C140.1 328.9 139.4 331.4 137.7 332.8C135.1 335.0 135.7 336.2 139.5 336.2C142.0 336.2 144.0 335.2 146.3 332.7ZM185.3 332.4C187.5 330.2 190.6 327.6 192.0 326.4C194.3 324.6 194.4 323.9 193.4 320.2C191.9 314.9 192.1 314.9 186.1 320.6C182.2 324.1 181.0 326.1 180.9 328.8L180.8 332.3L179.7 328.7C179.0 326.7 176.6 323.3 174.3 321.0L170.1 316.9L168.7 320.6C167.5 324.2 167.6 324.5 173.4 330.2C180.3 337.3 180.0 337.2 185.3 332.4ZM239.8 331.2C250.7 327.5 268.5 319.2 266.8 318.5C266.0 318.2 258.3 320.6 249.6 323.7C231.9 330.1 231.6 330.2 232.4 327.4C233.4 323.6 230.5 322.9 222.8 325.2C214.9 327.5 214.4 328.5 219.5 331.7C224.4 334.6 230.0 334.5 239.8 331.2ZM160.1 325.2C161.2 318.1 160.9 317.4 155.8 314.4C149.7 310.9 149.5 310.8 150.3 313.7C150.9 316.1 150.9 316.1 146.8 314.2C140.2 310.9 140.6 313.5 147.7 319.7C151.4 322.9 155.3 326.4 156.2 327.4C158.6 330.3 159.3 330.0 160.1 325.2ZM156.5 321.4C157.2 319.3 159.6 319.0 159.6 320.9C159.6 321.9 158.9 322.7 157.8 322.7C156.8 322.7 156.3 322.1 156.5 321.4ZM203.5 321.0C203.5 320.1 204.3 319.3 205.2 319.3C206.1 319.3 206.9 320.1 206.9 321.0C206.9 321.9 206.1 322.7 205.2 322.7C204.3 322.7 203.5 321.9 203.5 321.0ZM191.1 309.0C191.1 307.0 188.3 308.3 184.3 312.5C177.5 319.1 178.8 321.6 185.5 315.2C188.7 312.2 191.1 309.4 191.1 309.0ZM131.1 295.1C131.5 294.2 132.4 293.5 133.3 293.5C135.5 293.5 135.3 295.3 133.1 296.2C130.6 297.2 130.4 297.1 131.1 295.1Z"],["M208.0 476.9C208.0 474.7 207.5 474.4 205.5 474.9C204.1 475.3 200.7 475.9 197.9 476.3L192.8 477.0L199.0 470.6C202.4 467.1 206.6 463.2 208.4 461.8L211.7 459.4L211.0 468.3C210.2 476.5 208.0 483.1 208.0 476.9ZM145.0 476.9C133.9 476.3 130.3 475.8 127.9 474.1C124.0 471.5 124.0 472.2 128.7 457.5C133.8 442.0 133.8 439.7 129.3 439.7C125.3 439.7 125.3 439.5 127.6 431.1C128.5 427.5 128.9 424.4 128.7 424.0C128.4 423.7 125.3 424.8 122.0 426.5C118.6 428.1 115.7 429.1 115.3 428.6C115.0 428.1 115.9 424.4 117.2 420.4L119.6 413.0L136.5 410.0C145.8 408.4 154.1 407.0 154.9 407.0C155.9 407.0 156.3 412.8 156.3 431.9C156.3 447.6 156.7 457.5 157.5 459.1C158.2 460.5 162.6 465.2 167.3 469.7L175.9 477.8L167.5 477.7C162.9 477.6 152.8 477.2 145.0 476.9ZM170.4 466.8C158.2 454.5 156.2 449.3 167.1 458.4C170.8 461.6 175.9 466.5 178.5 469.6L183.4 475.0L188.4 469.1C194.8 461.8 206.5 452.7 207.1 454.5C207.7 456.1 186.1 477.2 183.4 477.7C182.4 477.8 177.1 473.4 170.4 466.8ZM177.1 461.0C173.9 457.9 169.1 453.7 166.2 451.7L160.8 448.1L161.1 426.7L161.3 405.5L166.3 404.6C171.1 403.8 171.6 403.9 188.4 414.6L205.5 425.5L206.0 431.7C206.8 445.5 206.0 447.9 198.4 453.5C194.7 456.2 189.9 460.3 187.9 462.6C183.0 467.7 183.7 467.8 177.1 461.0ZM211.5 444.5C211.4 431.2 211.6 429.6 213.2 430.3C214.7 430.9 214.9 432.1 214.2 437.9C213.7 441.7 213.1 448.0 212.5 452.0C211.8 458.3 211.7 457.4 211.5 444.5Z","M208.0 476.9C208.0 474.7 207.5 474.4 205.5 474.9C204.1 475.3 200.7 475.9 197.9 476.3L192.8 477.0L199.0 470.6C202.4 467.1 206.6 463.2 208.4 461.8L211.7 459.4L211.0 468.3C210.2 476.5 208.0 483.1 208.0 476.9ZM153.8 477.1L148.4 476.7L150.6 472.3C153.1 467.4 153.5 465.5 151.9 465.5C151.3 465.5 149.6 468.0 148.2 471.1L145.6 476.7L138.9 476.8C132.3 476.8 124.8 473.6 124.8 470.9C124.8 470.2 126.6 464.2 128.7 457.5C133.8 442.0 133.8 439.7 129.3 439.7C125.3 439.7 125.3 439.5 127.6 431.1C128.5 427.5 128.9 424.4 128.7 424.0C128.4 423.7 125.3 424.8 122.0 426.5C118.6 428.1 115.7 429.1 115.3 428.5C114.9 428.0 118.5 415.3 119.6 413.1C119.7 413.0 122.0 412.6 124.7 412.1L129.7 411.3L126.4 414.1C121.1 418.6 124.2 419.1 129.7 414.5C133.8 411.2 136.5 410.1 143.6 408.7C157.7 406.0 156.3 403.3 156.3 431.9C156.3 447.6 156.7 457.5 157.5 459.1C158.2 460.5 162.6 465.2 167.3 469.7L175.9 477.8L167.5 477.7C162.9 477.6 156.7 477.3 153.8 477.1ZM170.4 466.8C158.2 454.5 156.2 449.3 167.1 458.4C170.8 461.6 175.9 466.5 178.5 469.6L183.4 475.0L188.4 469.1C194.8 461.8 206.5 452.7 207.1 454.5C207.7 456.1 186.1 477.2 183.4 477.7C182.4 477.8 177.1 473.4 170.4 466.8ZM140.3 464.5C149.2 460.0 152.1 457.5 151.1 455.1C150.4 453.3 150.2 453.3 148.5 454.7C147.5 455.6 144.6 457.2 142.2 458.2C137.5 460.0 138.3 459.3 146.9 453.9C152.9 450.2 153.0 447.8 147.3 445.1C138.5 441.0 138.9 440.7 135.7 452.8C134.1 458.9 132.5 464.7 132.1 465.7C131.0 468.6 132.8 468.3 140.3 464.5ZM177.1 461.0C173.9 457.9 169.1 453.7 166.2 451.7L160.8 448.1L161.1 426.8C161.2 411.0 161.7 405.5 162.8 405.0C163.8 404.7 164.1 409.1 164.1 424.7V444.7L173.8 453.6L183.4 462.4L189.8 456.4C193.4 453.0 197.8 449.3 199.6 448.0C202.9 445.6 202.9 445.5 202.9 434.9C202.9 422.9 205.3 420.3 206.0 431.6C206.8 445.5 206.0 447.9 198.4 453.5C194.7 456.2 189.9 460.3 187.9 462.6C183.0 467.7 183.7 467.8 177.1 461.0ZM211.5 444.5C211.4 431.2 211.6 429.6 213.2 430.3C214.7 430.9 214.9 432.1 214.2 437.9C213.7 441.7 213.1 448.0 212.5 452.0C211.8 458.3 211.7 457.4 211.5 444.5ZM180.6 451.2C178.6 448.7 178.5 448.3 180.3 447.3C181.9 446.4 182.1 443.8 182.1 428.9C182.1 415.4 182.5 411.4 183.5 411.8C184.6 412.2 185.1 416.9 185.3 429.6C185.4 439.1 186.1 447.4 186.6 448.0C187.6 449.0 184.8 454.3 183.4 454.3C183.0 454.3 181.7 452.9 180.6 451.2ZM171.7 446.7C171.2 446.4 170.9 436.5 170.9 424.9C170.9 406.6 171.1 403.8 172.6 404.3C174.0 404.9 174.3 408.4 174.3 426.3C174.3 445.7 173.8 449.0 171.7 446.7ZM193.2 432.5C192.9 420.8 193.2 417.6 194.3 418.0C196.0 418.6 196.3 447.5 194.6 447.5C193.9 447.5 193.4 441.0 193.2 432.5ZM151.5 433.8C151.2 431.1 146.8 429.1 138.2 427.7C134.2 427.1 133.8 427.3 133.8 429.4C133.8 431.0 134.7 431.9 136.9 432.5C138.6 432.8 142.2 433.8 145.0 434.6C152.0 436.6 152.0 436.6 151.5 433.8ZM151.5 424.8C150.9 422.8 146.4 420.8 141.6 420.3C135.1 419.8 136.1 421.9 143.3 423.9C151.9 426.4 152.0 426.4 151.5 424.8ZM151.8 416.6C151.8 412.0 151.7 412.0 145.9 415.1L141.5 417.6L145.2 419.0C151.1 421.1 151.8 420.9 151.8 416.6Z"],["M295.8 485.7C295.7 484.2 292.8 483.6 278.6 482.5C269.2 481.7 258.4 480.8 254.4 480.5C247.4 479.8 247.4 479.8 247.4 482.8C247.4 484.4 246.7 485.8 246.0 485.7C244.4 485.7 228.4 463.2 220.6 450.1L215.8 442.0L213.6 416.9C212.4 403.1 211.4 391.1 211.4 390.2C211.4 388.7 214.2 388.2 226.9 386.9L242.3 385.6L245.1 389.3C253.9 400.9 263.9 409.4 275.9 415.5C281.9 418.6 282.8 419.5 284.5 424.5C285.6 427.6 288.3 434.3 290.5 439.3C295.4 450.0 298.0 461.1 297.8 470.6C297.8 477.0 296.2 489.4 295.8 485.7ZM272.0 410.3C264.2 405.2 245.9 387.3 246.9 385.6C248.4 383.2 253.1 384.9 259.5 390.1C263.3 393.1 268.4 396.7 270.9 398.2C273.3 399.5 275.6 401.2 275.8 401.9C282.0 417.2 282.2 416.8 272.0 410.3ZM265.3 389.1L259.2 383.4L264.7 383.8L270.2 384.0L271.5 389.3C273.2 395.9 273.0 395.9 265.3 389.1Z","M295.8 485.5C295.7 484.2 294.8 483.5 292.9 483.5C290.2 483.5 290.2 483.5 291.8 478.9C294.7 470.7 293.6 469.0 290.1 476.4L286.9 483.4L280.9 482.7C277.6 482.4 274.8 482.1 274.7 481.9C274.6 481.8 276.5 477.1 279.0 471.4C284.9 457.4 286.0 450.8 280.5 462.1C278.2 466.8 275.5 472.7 274.2 475.4C273.1 478.0 271.8 480.1 271.1 480.1C270.0 480.1 252.4 466.2 251.3 464.4C249.9 462.3 251.5 463.3 260.4 470.0C265.2 473.7 269.3 476.5 269.5 476.4C269.7 476.2 268.9 473.3 267.7 469.9L265.7 463.8L270.1 459.0C276.0 452.5 275.7 449.1 268.7 445.5L263.7 442.8L267.0 445.7C268.9 447.3 270.7 448.7 271.2 448.7C272.3 448.7 272.3 452.3 271.4 454.8C270.0 458.4 258.7 461.8 257.0 459.0C256.7 458.4 258.0 458.3 260 458.5C263.0 459.0 263.3 458.8 262.9 457.0C262.5 455.7 261.3 451.7 260.3 447.8C259.2 443.9 257.8 440.8 257.4 440.8C255.5 440.8 247.4 451.5 245.8 456.2C243.5 462.8 244.0 463.6 256.7 473.5L267.0 481.5L258.0 480.7C252.5 480.3 248.3 479.2 247.1 478.1C246.0 477.2 245.1 477.0 245.1 477.7C245.1 478.3 245.6 479.2 246.2 479.6C247.8 480.6 247.6 485.8 246.0 485.7C244.4 485.7 228.4 463.2 220.6 450.1L215.8 442.0L213.6 416.9C212.4 403.1 211.4 391.1 211.4 390.1C211.4 387.5 225.9 386.5 231.9 388.6C237.1 390.4 239.8 390.6 237.0 388.9C233.9 387.1 234.6 385.7 238.8 385.7C242.1 385.7 243.2 386.5 246.6 391.1C254.0 401.0 264.2 409.5 275.8 415.5C282.0 418.6 282.8 419.4 284.5 424.5C285.6 427.6 288.3 434.3 290.5 439.3C295.4 450.0 298.0 461.1 297.8 470.6C297.8 477.1 296.2 489.5 295.8 485.5ZM251.1 431.2C255.3 427.6 256.0 426.5 255.1 424.8C254.4 423.5 254.4 422.8 255.1 422.8C255.8 422.8 256.8 423.7 257.4 424.9C258.0 426.0 260.4 427.4 262.8 427.8C265.1 428.3 269.5 429.8 272.7 431.2C278.8 434.3 280.8 433.9 276.6 430.5C271.6 426.5 260.4 421.7 256.2 421.7C249.9 421.7 239.6 434.6 239.5 442.6C239.5 447.0 240.9 446.4 243.4 440.9C244.9 437.9 248.1 433.7 251.1 431.2ZM239.3 431.9C244.8 420.1 252.4 415.6 263.0 418.1C269.8 419.6 270.1 419.0 263.5 416.7C256.4 414.2 251.2 414.5 246.7 417.3C239.9 421.4 233.1 431.9 234.5 435.7C235.7 438.4 236.4 437.6 239.3 431.9ZM235.7 425.6C237.2 422.8 240.8 418.5 243.6 416.2C248.7 411.9 248.7 411.7 247.5 408.1C245.2 401.4 243.2 399.5 236.7 397.5C229.5 395.1 229.6 395.0 225.3 404.6L222.2 411.8L226.9 421.2C229.5 426.4 231.8 430.7 232.2 430.7C232.4 430.7 234.0 428.4 235.7 425.6ZM272.0 410.3C264.2 405.2 245.9 387.3 246.9 385.6C248.4 383.2 253.1 384.9 259.5 390.1C263.3 393.1 268.4 396.7 270.9 398.2C273.3 399.5 275.6 401.2 275.8 401.9C282.0 417.2 282.2 416.8 272.0 410.3ZM222.2 400.2C224.0 396.6 224.6 394.0 224.0 393.3C223.3 392.6 222.1 394.4 220.5 397.9C216.4 407.5 217.6 409.1 222.2 400.2ZM265.3 389.1L259.2 383.4L264.7 383.8L270.2 384.0L271.5 389.3C273.2 395.9 273.0 395.9 265.3 389.1Z"],["M158.4 585C152.6 582.7 146.0 579.7 144.1 578.2L140.5 575.6L143.2 572.0C150.8 562.0 151.2 560.0 151.2 538.6C151.1 506.0 146.9 490.3 135.8 479.9C132.5 477.0 130.2 474.4 130.5 474.2C130.7 474.0 140.5 474.2 152.2 474.7L173.4 475.6L178.2 481.0L183.0 486.3L189.7 480.0C195.2 474.7 197.1 473.6 201.7 472.9C204.7 472.5 207.9 471.8 208.7 471.5C211.5 470.5 210.5 475.6 204.6 493.0C201.6 502.1 198.1 514.9 196.7 521.5C195.4 528.2 192.7 539.4 190.6 546.5L186.7 559.4L189.2 572.1L191.8 584.7L187.2 586.0C184.7 586.5 181.2 587.5 179.4 588.1C174.0 589.9 169.8 589.2 158.4 585ZM181.0 477.3C179.8 475.9 180.1 475.6 183.3 475.6C186.4 475.6 186.7 475.9 185.5 477.3C184.7 478.2 183.7 479.0 183.3 479.0C182.8 479.0 181.8 478.2 181.0 477.3Z","M158.4 585C152.6 582.7 146.0 579.7 144.1 578.2L140.5 575.6L143.2 572.0C150.8 562.0 151.2 560.0 151.2 538.6C151.1 506.0 146.9 490.3 135.8 479.9C132.5 477.0 130.2 474.4 130.5 474.2C130.7 474.0 134.3 474.0 138.5 474.3L146.1 474.7L146.3 478.3L146.4 481.8L147.9 478.1L149.6 474.3L161.6 475.1L173.6 476.0L178.3 481.2L183.0 486.3L189.7 480.0C195.2 474.7 197.1 473.6 201.7 472.9C204.7 472.5 207.9 471.8 208.7 471.5C211.5 470.5 210.5 475.6 204.6 493.0C201.6 502.1 198.1 514.9 196.7 521.5C195.4 528.2 192.7 539.4 190.6 546.5L186.7 559.4L189.2 572.1L191.8 584.7L187.2 586.0C184.7 586.5 181.2 587.5 179.4 588.1C174.0 589.9 169.8 589.2 158.4 585ZM175.0 582.5L178.8 580.2L176.3 575.3L173.9 570.3L177.6 548.0C181.3 525.7 183.0 504.3 181.7 498.7C180.9 495.7 175.9 490.3 173.9 490.3C173.4 490.3 174.3 492.2 176.1 494.4C181.1 501.2 181.1 507.1 175.3 548.2C172.2 569.8 172.9 568.5 166.8 563.9C164.0 561.8 161.3 560.0 160.9 560.0C160.3 560.0 159.6 550.8 159.3 539.5C158.7 521.7 157.2 509.3 155.7 510.7C155.5 511.0 155.8 517.7 156.4 525.7C157.1 533.8 157.4 545.1 157.1 551.0L156.4 561.7L161.9 564.7C167.2 567.7 174.3 575.6 174.3 578.5C174.3 581.8 169.3 581.2 163.4 577.3C158.1 573.8 157.4 572.9 157.7 569.8C158.1 564.8 155.1 564.6 152.1 569.5L149.5 573.4L155.5 576.4C158.9 578.0 163.0 580.5 164.8 581.9C168.9 585.3 170.4 585.3 175.0 582.5ZM163.7 491.6C165.4 488.4 166.4 485.4 166.0 485.1C165.7 484.8 164.8 485.7 164.1 487.1C163.4 488.5 160.8 492.3 158.4 495.5C155.9 498.8 154.0 502.3 154.0 503.4C154.1 506.3 160.0 499.1 163.7 491.6ZM156.0 491.8C158.9 487.6 162.2 479.0 161.4 478.2C161.1 477.8 151.8 494.3 151.8 495.4C151.8 497.0 153.8 495.3 156.0 491.8ZM181.0 477.3C179.8 475.9 180.1 475.6 183.3 475.6C186.4 475.6 186.7 475.9 185.5 477.3C184.7 478.2 183.7 479.0 183.3 479.0C182.8 479.0 181.8 478.2 181.0 477.3Z"],["M273.4 573.0C271.0 567.3 271.0 566.7 272.7 564.1C274.3 561.6 274.1 560.7 269.4 547.1C266.6 539.2 263.5 531.9 262.6 530.9C261.9 529.8 259.7 524.4 258.0 518.9C256.4 513.4 253.1 504.7 250.7 499.6C246.8 491.0 243.0 478.5 244.1 477.4C244.3 477.2 256.2 478.1 270.5 479.4L296.6 481.6L297.3 490.7C298.6 507.2 300.8 518.3 308.8 552.5C311.6 564.7 313.8 574.9 313.6 575.1C313.4 575.3 306.8 576.1 299.1 576.7C291.3 577.4 283.0 578.3 280.5 578.7L275.9 579.3L273.4 573.0Z","M273.3 573.0C271.0 567.3 271.0 566.7 272.7 564.1C274.3 561.6 274.1 560.7 269.4 547.1C266.6 539.2 263.5 531.9 262.6 530.9C261.9 529.8 259.7 524.4 258.0 518.9C256.4 513.4 253.2 505.0 251.1 500.4C244.5 486.6 241.5 472.7 246.3 479.6C251.9 487.2 276.9 504.7 279.4 502.6C280.1 502.1 283.0 497.0 286.0 491.4C290.4 483.2 291.9 481.3 293.9 481.3C296.4 481.3 296.6 481.8 297.3 490.5C298.6 507.2 300.7 518.2 308.8 552.5C311.6 564.7 313.8 574.9 313.6 575.1C312.9 575.7 287.5 578.0 286.9 577.5C286.7 577.3 288.9 575.7 291.8 574.0C296.9 570.9 302.2 570.7 308.6 573.0C310.6 573.8 310.7 573.7 309.4 572.1C308.6 571.1 305.8 569.9 303.2 569.5C297.2 568.5 294.9 567.3 294.0 564.5C293.0 561.3 292.6 561.6 285.8 567.7C281.5 571.7 280.0 573.9 280.0 576.1C280.0 581.6 276.1 579.8 273.3 573.0ZM285.4 563.4C292.1 557.3 294.5 556.7 301.0 559.4C306.1 561.6 306.3 561.6 305.3 559.1C304.4 556.8 300.9 533.9 298.0 511.6L295.9 496.4L295.8 505.4C295.7 513.3 299.2 538.3 302.5 552.6C303.6 557.8 303.5 558.3 300.4 556.7C299.1 556.0 296.8 555.5 295.4 555.5C291.3 555.5 290.9 554.5 285.6 534.1C280.1 513.0 278.8 510.1 274.6 507.8C272.9 506.9 267.0 502.9 261.6 498.8C254.1 493.2 252.3 492.3 254.1 494.8C255.5 496.6 257.0 498.4 257.6 498.8C262.2 501.6 271.3 521.0 277.2 540.2C281.7 555.3 282.3 562.3 279.5 565.5C277.7 567.5 277.2 569.0 278.4 569.0C278.7 569.0 281.9 566.5 285.4 563.4ZM273.8 536.7C270.4 525.7 263.3 510.6 259.1 505.4C255.7 501.4 256.2 503.2 262.1 515.0C264.3 519.7 268.4 529.1 271.1 535.9C276.8 550.4 278.1 550.8 273.8 536.7ZM265.7 491.7C260.1 488.1 253.3 483.4 250.6 481.2L245.9 477.2L254.6 478.0C261.3 478.7 264.3 479.6 267.9 481.9L272.5 485.0L274.1 482.5C275.8 480.0 283.3 479.1 286.4 481.0C288.1 482.1 280.2 497.5 277.7 497.9C276.7 498.0 271.3 495.3 265.7 491.7ZM292.3 489.7C292.3 489.1 291.8 489.4 291.2 490.3C290.7 491.2 290.1 492.5 290.1 493.1C290.1 493.6 290.7 493.4 291.2 492.5C291.8 491.6 292.3 490.3 292.3 489.7Z"],["M104.1 609.2C106.0 603.1 106.8 602.0 110.8 600.6C117.5 598.3 139.5 587.1 143.6 584.1C145.8 582.4 146.9 580.7 146.6 579.7C145.6 577.2 146.7 577.5 160.3 582.5L172.6 587.1L181.3 584.7C191.4 582.0 191.7 582.1 192.7 588.0C193.0 590.5 195.2 596.6 197.3 601.7C199.4 606.9 201.2 611.3 201.2 611.4C201.2 611.6 179.2 611.7 152.2 611.7H103.3L104.1 609.2Z","M104.1 609.2C106.0 603.1 106.8 602.0 110.8 600.6C117.5 598.3 139.5 587.1 143.6 584.1C145.8 582.4 146.9 580.7 146.6 579.7C145.6 577.2 146.7 577.5 160.3 582.5L172.6 587.1L181.3 584.7C191.4 582.0 191.7 582.1 192.7 588.0C193.0 590.5 195.2 596.6 197.3 601.7C199.4 606.9 201.2 611.3 201.2 611.4C201.2 611.6 179.2 611.7 152.2 611.7H103.3L104.1 609.2ZM135.3 607.8C140.2 606.9 146.7 606.1 149.9 606.1C154.0 606.1 155.3 605.8 154.0 605.0C151.5 603.4 142.4 603.6 131.5 605.5C118.7 607.8 118.4 607.7 128.2 604.0C137.6 600.5 144.2 596.5 148.3 592.1C149.9 590.6 151.3 589.2 151.8 589.2C153.6 589.2 160.2 597.0 162.1 601.4C163.2 604.0 164.7 606.1 165.3 606.1C169.0 606.1 162.0 592.6 156.3 588.7L151.9 585.6L142.5 591.2C137.4 594.4 128.4 599.0 122.5 601.6C111.3 606.5 109.0 607.9 109.0 609.8C109.0 611.2 123.0 610.1 135.3 607.8Z"],["M296.3 620.1C291.3 618.7 284.7 616.4 281.7 615.2L276.0 613.1L276.6 607.0C277.3 599.1 277.2 593.6 276.0 584.6L275.1 577.1L278.4 576.4C284.1 575.3 312.6 573.1 313.3 573.8C313.6 574.2 314.8 578.1 316.1 582.7C317.2 587.3 319.9 594.8 322.0 599.5C328.2 612.8 328.1 613.9 319.2 618.2C309.0 623.2 306.7 623.4 296.3 620.1Z","M296.3 620.1C291.3 618.7 284.7 616.4 281.7 615.2L276.0 613.1L276.6 607.0C277.3 599.1 277.2 593.6 276.0 584.6C275.2 577.6 275.4 577.2 277.5 576.6C279.2 576.2 280.0 576.6 280.4 578.7L281.1 581.2L285.9 578.0C290.1 575.2 292.0 574.7 302.1 574.0L313.6 573.3L314.7 577.9C315.4 580.5 316.5 584.4 317.1 586.9C317.8 589.2 319.9 595.0 322.0 599.5C328.2 612.8 328.1 613.9 319.2 618.2C309.0 623.2 306.7 623.4 296.3 620.1ZM305.3 613.7C304.8 611.0 304.0 606.9 303.4 604.4L302.2 599.9L300.1 602.6C297.5 605.8 297.3 603.8 299.6 599.2C300.8 597.1 301.1 595.3 300.4 594.2C299.6 592.7 298.3 593.4 292.6 598.1C283.9 605.3 283.7 604.5 291.9 596.0C297.3 590.3 298.1 588.9 297.7 585.6C297.5 583.2 296.7 581.8 295.4 581.6C292.6 581.0 285.6 588.3 285.6 591.7C285.6 593.3 284.9 596.9 284.0 599.7C282.1 605.9 282.1 605.9 295.1 613.3C306.2 619.6 306.2 619.6 305.3 613.7ZM314.8 598.8C314.8 598.6 312.2 597.0 309.1 595.3C303.5 592.5 300.7 592.4 303.5 595.2C305.7 597.4 314.8 600.4 314.8 598.8Z"],["M123.4 276.7C123.2 275.5 117.6 270.2 110.8 264.9C100.7 256.9 99.0 255.2 101.5 255.2C104.1 255.2 104.5 254.6 106.2 248.7C107.2 245.2 108.2 241.4 108.6 240.4C109.0 238.9 108.1 238.1 104.9 237.3C97.0 235.1 96.8 234.4 102.1 229.6C106.9 225.1 107.8 223.0 105.4 220.6C104.4 219.6 104.4 218.2 105.4 215.0C106.2 212.5 106.8 208.4 106.8 205.9C106.8 193.4 120.5 174.7 135.5 166.9C144.1 162.5 149.5 158.2 149.5 155.8C149.5 155.1 150.5 153.3 151.8 151.8L154.0 149.0V154.8C154.0 159.9 154.5 161.0 157.3 163.2C160.1 165.5 161.0 167.8 164.1 181.1L167.8 196.4L157.1 225.7C151.1 241.7 146.1 255.8 146.1 256.8C146.1 257.8 145.7 258.6 145.2 258.6C144.7 258.6 140.3 263.1 135.3 268.7C126.2 279.1 124.1 280.5 123.4 276.7Z","M125.7 278.1C126.4 277.8 127.0 277.0 127.0 276.5C127.0 275.9 126.4 275.5 125.7 275.5C124.9 275.5 118.5 270.9 111.4 265.3C100.8 257.0 99.0 255.2 101.5 255.2C104.1 255.2 104.5 254.6 106.2 248.7C107.2 245.2 108.2 241.4 108.6 240.4C109.0 238.9 108.1 238.1 104.9 237.3C97.0 235.1 96.8 234.4 102.1 229.6C106.9 225.1 107.8 223.0 105.4 220.6C104.4 219.6 104.4 218.2 105.4 215.0C106.2 212.5 106.8 208.4 106.8 205.9C106.8 193.4 120.5 174.7 135.5 166.9C144.1 162.5 149.5 158.2 149.5 155.8C149.5 155.1 150.6 153.3 151.9 151.8L154.1 149.0L153.7 156.3C153.3 160.3 151.8 171.1 150.2 180.4C146.7 200.3 143.8 207.1 135.2 215.6C128.3 222.4 128.2 225.7 135.0 220.1C141.2 215.2 147.6 205.2 149.9 197.2C151.3 191.9 155.1 166.9 155.1 162.7C155.1 162.2 156.3 162.6 157.6 163.6C159.6 164.8 160.9 168.2 163.1 177.1C164.7 183.6 165.8 188.9 165.6 188.9C165.4 188.9 164.1 187.2 162.9 185.3L160.5 181.6L161.1 185.7C161.4 188.1 163.0 191.7 164.6 193.7C167.2 197.1 167.4 198.0 166.3 201.0C165.0 204.5 163.0 206.0 163.0 203.4C163.0 202.5 162.6 202.5 161.6 203.4C159.2 205.3 157.4 212.6 158.1 217.6C158.5 220.6 158.4 221.6 157.6 220.5C155.4 217.3 153.9 220.5 154.6 226.9C155.3 232.8 155.1 233.2 153.5 231.0C151.9 229.1 151.5 229.0 150.6 230.5C149.3 232.6 149.3 232.5 150.6 237.1C152.0 242.1 150.3 246.0 148.5 241.7C147.5 239.3 147.4 239.8 147.3 245.1C147.3 252.3 146.3 258.6 145.1 258.6C144.7 258.6 140.3 263.1 135.3 268.7C130.5 274.2 125.9 278.8 125.3 278.7C124.8 278.7 124.9 278.4 125.7 278.1ZM134.8 262.4C129.2 256.4 117.7 252.8 112.5 255.5C108.0 257.9 109.7 259.2 118.4 259.7C123.7 260.2 128.2 261.2 131.0 262.8C137.0 266.0 138.0 265.9 134.8 262.4ZM134.8 252.3C133.2 251.3 131.4 249.4 130.9 248.0C129.5 245.0 122.5 245.1 115.6 248.3L110.7 250.5L118.6 250.7C123.0 250.8 128.3 251.6 130.4 252.4C135.8 254.6 138.3 254.4 134.8 252.3ZM123.4 241.3C127.9 240.4 132.0 239.4 132.4 239.0C133.7 237.7 119.8 239.7 116.9 241.3C113.3 243.2 113.5 243.2 123.4 241.3ZM123.7 231.0C126.1 229.7 126.2 229.5 124.6 228.8C123.4 228.4 122.5 227.3 122.5 226.6C122.5 224.2 112.5 224.8 111.3 227.1C110.7 228.2 110.6 229.4 110.9 229.8C111.3 230.1 111.1 230.5 110.3 230.5C109.5 230.5 109.3 230.9 109.6 231.6C110.6 233.3 120.4 232.8 123.7 231.0ZM150.9 220.0C158.5 206.6 161.3 199.0 158.7 199.0C157.8 199.0 150.0 214.9 145.4 225.8C142.5 232.5 145.6 229.4 150.9 220.0ZM121.3 218.6C121.9 218.0 121.9 218.0 116.7 215.0C112.5 212.6 112.4 212.6 111.3 214.7C109.7 217.7 109.8 218.0 112.6 219.2C115.0 220.1 120.1 219.8 121.3 218.6ZM123.0 201.5L122.4 193.9L126.5 200.1L130.5 206.3L130 195.6L129.3 184.9L133.3 192.7C136.4 198.7 137.6 200.1 138.4 198.8C139.6 196.5 142.3 172.2 141.4 171.3C137.6 167.6 114.7 190.2 114.7 197.6C114.7 198.8 122.3 209.1 123.1 209.1C123.3 209.1 123.3 205.7 123.0 201.5ZM113.6 204.3C112.7 203.4 112.4 203.5 112.4 204.7C112.4 205.7 112.7 206.9 113.2 207.3C113.6 207.8 114.2 207.5 114.4 206.9C114.8 206.1 114.3 205.0 113.6 204.3ZM146.9 179.9C147.3 174.0 147.3 169.4 146.9 169.8C146.0 170.5 144.2 182.7 143.4 192.8L142.9 200.7L144.6 195.6C145.5 192.8 146.5 185.7 146.9 179.9Z"],["M255.8 263.0L247.9 247.1L228.5 237.3L209.1 227.7L209.2 205.2C209.2 192.8 209.7 180.4 210.0 177.7L210.8 172.7L226.0 168.6C236.7 165.7 247.1 161.8 261.0 155.4L280.9 146.1L286.4 147.8C300.7 152.1 310.8 165.4 313.8 184.2C314.8 190.3 314.8 193.0 313.8 195.2C312.1 198.9 314.3 203.0 320.6 208.4L325.3 212.4L320.0 214.6C314.6 217.0 314.2 217.9 316.0 223.3C316.5 225.1 317.5 228.7 318.2 231.4C319.2 235.2 319.9 236.1 322.0 236.1C323.4 236.1 325.7 237.5 327.3 239.0C328.8 240.6 332.1 243.2 334.7 244.7L339.3 247.5L336.1 253.8C334.3 257.1 332.8 261.0 332.8 262.1C332.8 264.1 331.5 264.2 299.6 264.2H266.4L267.1 271.5C267.8 278.3 267.7 278.8 265.8 278.8C264.1 278.8 261.7 275.1 255.8 263.0Z","M255.7 262.9L247.6 246.8L235.2 240.7C223.9 235.1 222.5 234.1 218.8 228.5C213.6 220.6 210.5 210.2 209.5 198.2C208.8 189.0 208.9 188.5 211.5 186.4C214.2 184.3 214.2 184.3 211.6 184.9C207.9 186.0 208.4 183.0 212.5 180.7C216.2 178.4 217.3 175.6 213.7 177.6C210.5 179.3 210.0 179.1 210.5 175.8C210.8 172.8 212.3 172.0 223.0 169.3L225.8 168.6L224.2 173.9C218.2 193.6 225.9 211.5 244.4 221.0L252.6 225.3L257.9 220.8C264.0 215.8 263.1 214.4 256.5 218.7L251.9 221.5L246.5 218.8C231.6 211.3 225.7 202.7 225.7 189.1C225.7 179.9 228.6 169.1 231.6 167.5C235.5 165.4 236.0 166.4 233.3 171.1C227.9 180.9 227.5 196.1 232.3 202.8C234.0 205.1 234.0 205.1 233.1 201.8C230.9 193.7 232.1 181.9 235.8 174.3C240.5 164.6 240.5 164.5 245.7 162.3L250.2 160.5L246.0 164.9C238.5 172.8 234.0 184.8 235.5 192.8C236.3 197.2 236.4 197.2 237.5 194.5C241.3 184.4 252.9 169.2 255.0 171.3C255.3 171.7 254.3 172.9 252.9 174.1C246.5 179.2 241.3 193.8 243.8 200.1C244.8 202.8 244.9 202.8 245.7 200.7C248.0 193.8 249.0 192.1 253.2 188.2C257.5 184.0 257.6 184.0 255.2 187.4C253.4 190.0 252.5 193.0 252.2 197.5L251.7 204.1L254.0 198.5C259.7 184.6 279.5 173.4 299.1 173.1C302.3 173.0 302.8 172.8 301.2 171.7C300.3 170.9 298.2 168.3 296.5 165.8L293.5 161.3V164.8C293.5 166.8 292.8 169.0 291.9 169.6C290.8 170.5 280.9 174.1 279.2 174.3C279.1 174.3 278.1 172.7 277.2 170.9C276.1 169.0 273.9 166.5 272.0 165.4L268.6 163.4L274.0 161.0C277.0 159.8 281.9 158.1 284.8 157.4C287.6 156.6 289.8 155.6 289.4 155.0C288.4 153.2 284.1 154.0 275.7 157.4C267.5 160.5 267.4 160.5 265.2 158.4C264.1 157.3 262.2 156.3 261.1 156.3C260.1 156.3 264.0 154.0 270.0 151.2L280.9 146.1L286.4 147.8C300.7 152.1 310.8 165.4 313.8 184.2C314.8 190.3 314.8 193.0 313.8 195.2C312.1 198.9 314.3 203.0 320.6 208.4L325.3 212.4L320.0 214.6C314.6 217.0 314.2 217.9 316.0 223.3C316.5 225.1 317.5 228.7 318.2 231.4C319.2 235.2 319.9 236.1 322.0 236.1C323.4 236.1 325.7 237.5 327.3 239.0C328.8 240.6 332.1 243.2 334.7 244.7L339.3 247.5L336.1 253.8C334.3 257.1 332.8 261.0 332.8 262.1C332.8 263.7 332.0 264.2 329.6 264.2C326.4 264.2 326.4 264.2 327.5 259.7C328.7 255.7 328.5 255.0 326.1 252.4C322.6 248.7 321.9 249.7 324.8 254.4C327.0 257.8 327.0 258.5 325.5 259.7C324.6 260.5 323.8 261.9 323.8 262.6C323.8 265.1 322.3 264.4 320.3 261.1C318.9 258.5 318.8 257.5 319.9 255.9C320.7 254.9 321.1 253.0 320.8 251.9C320.2 249.7 320.1 249.8 316.6 252.3C314.7 253.8 312.1 255.2 311.0 255.7C309.9 256.0 309.1 256.6 309.3 256.8C309.5 257.1 311.7 258.8 314.2 260.7C318.1 263.9 318.3 264.2 315.8 264.2C312.8 264.1 301.9 255.2 304.8 255.2C307.5 255.2 322.7 245.0 322.7 243.2C322.7 241.1 321.8 241.3 314.4 246.1C310.6 248.6 304.8 251.6 301.6 253.0C294.7 255.9 294.5 256.6 299.3 258.4C301.3 259.2 304.3 260.7 305.8 262.0L308.6 264.2H292.0H275.4L270.5 253.9C267.8 248.1 265.2 242.2 264.6 240.6C263.4 237.9 263.3 238.0 260 244.0C255.3 252.1 255.3 252.9 262.0 266.4C268.4 279.5 268.2 278.8 265.6 278.8C264.2 278.8 261.4 274.3 255.7 262.9ZM279.4 249.6C282.7 246.0 288.4 244.8 297.5 245.6C307.2 246.5 308.3 245.1 300.4 242.1C288.9 237.6 275.5 242.0 275.5 250.3C275.5 252.5 277.0 252.2 279.4 249.6ZM237.5 233.0C232.6 228.2 227.9 221.8 224.4 215.6C221.5 210.1 218.8 205.7 218.7 205.7C217.9 205.7 220.8 214.6 223.2 219.2C226.9 226.4 232.1 232.6 238.0 236.9C246.0 242.5 245.8 241.4 237.5 233.0ZM291.8 235.7C296.2 235.7 301.6 236.3 303.9 237.1C310.9 239.5 309.9 237.7 302.2 234.0C289.1 227.5 272.3 227.0 271.2 233.1C270.9 234.9 271.1 235.0 273.0 234.0C276.9 231.8 278.3 232.6 275.7 235.3C271.6 239.6 272.8 240.7 278.6 238.0C282.4 236.2 286.0 235.7 291.8 235.7ZM211.6 229.1C209.5 228.1 209.1 227.0 209.2 222.2C209.2 219.0 209.6 217.2 209.9 218.1C210.2 219.0 211.7 222.2 213.2 225.1C215.9 230.7 215.8 231.0 211.6 229.1ZM305.6 226.4C289.6 218.2 268.3 218.6 265.6 227.1C265.1 228.4 265.8 228.1 267.6 226.6C271.1 223.4 290.7 223.6 301.3 226.9C311.1 229.8 311.9 229.8 305.6 226.4ZM253.9 215.0C253.4 212.6 251.4 212.8 251.0 215.2C250.7 216.3 251.3 217.0 252.4 217.0C253.5 217.0 254.1 216.2 253.9 215.0ZM305.5 212.9C313.4 210.7 312.5 209.7 304.0 211.3C300.4 211.9 295.0 212.4 291.9 212.4L286.2 212.2L292.6 211.4C301.8 210.2 309.3 207.9 308.9 206.4C308.6 205.7 306.4 205.3 303.6 205.5C294.4 206.3 289.3 204.8 287.8 201.2C285.5 195.5 274.9 197.3 270.4 204.2C268.5 207.1 268.5 207.2 270.5 206.3C278.5 203.2 285.5 203.5 278.1 206.9C271.0 210.0 270.0 212.3 275.1 213.1C277.5 213.5 280.0 214.0 280.5 214.2C283.9 215.3 300.1 214.5 305.5 212.9ZM273.6 195.7C276.5 194.8 281.3 194.5 284.5 194.7C290.9 195.4 290.9 195.4 287.8 191.1C286.6 189.3 284.8 186.1 283.9 183.9C279.3 172.9 259.7 188.5 259.7 203.3C259.7 205.5 260.1 205.4 264.0 201.5C266.7 198.8 270.3 196.6 273.6 195.7ZM303.6 195.4C303.6 194.8 302.8 194.5 301.9 194.5C300.2 194.5 299.6 196.9 301.0 198.2C301.8 199.0 303.6 197.0 303.6 195.4ZM305.6 191.7C305.7 191.6 304.6 188.8 303.1 185.4C300.4 179.5 300.3 179.4 300.3 183.0C300.2 185.1 299.6 187.9 299.0 189.1C297.2 192.5 302.2 194.5 305.6 191.7Z"],["M77.8 308.3C73.9 308.1 70.8 307.6 70.8 307.2C70.8 306.7 72.0 299.4 73.5 290.9C75.0 282.3 75.9 274.1 75.5 272.7C75.2 270.4 75.5 269.8 77.3 269.8C78.7 269.8 81.6 267.5 84.5 264.3C89.5 258.6 95.4 255.2 100.7 255.2C103.1 255.2 116.6 264.6 125.1 272.1C125.7 272.5 125.5 279.3 124.7 287.3C123.1 303.1 122.8 303.6 113.5 304.0C111.4 304.1 106.8 305.0 103.4 306.1C96.6 308.1 88.5 308.9 77.8 308.3Z","M77.8 308.3C73.3 308.1 70.8 307.5 70.9 306.6C71.0 302.9 75.1 283.1 75.2 285.4C75.3 289.0 77.7 288.0 80.0 283.2L81.9 279.4L82.0 283.2C82.0 286.4 82.4 286.8 84.1 286.2C85.1 285.7 88.7 285.0 91.9 284.7C98.2 284.1 98.1 284.2 95.8 277.8C94.8 275.1 97.7 277.6 99.4 280.9C105.2 292.7 100.8 300.4 87.1 302.5L81.5 303.4L87.4 303.5C98.3 303.7 104.5 298.5 104.5 289.0C104.5 281.5 97.7 271.0 92.8 271.0C91.6 271.0 87.9 272.1 84.7 273.3C81.5 274.7 78.1 275.5 77.1 275.1C74.5 274.1 74.7 269.8 77.4 269.8C78.7 269.8 81.8 267.4 84.5 264.3C94.6 252.6 100.1 252.6 114.8 263.9C125.2 272.1 128.0 275.5 124.3 275.5C121.5 275.5 120.3 283.2 122.5 286.7C123.3 288.0 123.7 287.4 123.7 284.5C123.7 282.3 124.2 279.7 124.9 278.8C125.8 277.5 125.9 277.6 125.5 279.4C125.2 280.6 124.6 286.2 124.1 291.6C123.3 302.6 122.4 303.7 113.5 304.0C111.4 304.1 106.8 305.0 103.4 306.1C96.6 308.1 88.5 308.9 77.8 308.3ZM113.5 274.1C112.7 272.8 110.8 270.1 109.1 268.3L106.2 265.0L109.9 267.5C114.5 270.6 114.7 268.7 110.2 264.9C105.9 261.4 100.5 260.3 96.1 262.1L92.7 263.3L97.6 265.0C100.1 265.9 105.0 269.2 108.2 272.1C114.5 277.8 115.7 278.3 113.5 274.1Z"],["M268.3 315.7C267.5 308.9 264.2 266.7 264.2 263.9C264.2 262.2 267.3 262.0 298.5 261.7L332.8 261.4V267.3C332.8 270.4 333.2 273.8 333.5 274.7C333.8 275.7 331.7 279.1 327.9 283.3C319.4 292.8 309.2 312.6 309.2 319.3C309.2 321.5 308.4 321.6 289.1 321.6H268.8L268.3 315.7Z","M268.3 315.7C267.1 305.7 265.3 281.2 265.3 277.4L265.5 273.8L267.9 278.6L270.5 283.5V277.5C270.4 273.0 271.1 270.6 273.0 267.9C274.5 265.9 275.2 263.8 274.9 263.1C274.5 262.3 279.9 262.0 290.4 262.0H306.6L311.9 267.5C314.7 270.6 317.9 274.9 319.0 277.0C321.2 282.0 321.9 282.0 324.8 277.8C327.9 273.7 327.9 272.3 325 274.9C323.7 276.0 322.5 276.7 322.4 276.5C322.1 276.3 320.8 274.1 319.3 271.8C318.0 269.4 315.5 266.1 313.8 264.7C310.9 262.0 310.9 262.0 313.5 262.0C314.8 262.0 317.0 263.0 318.2 264.2C319.4 265.5 320.7 266.5 321.0 266.5C321.4 266.5 321.6 265.5 321.6 264.2C321.6 263.0 322.1 262.0 322.8 262.0C323.6 262.0 323.8 263.1 323.4 264.8C322.5 268.4 324.2 268.5 325.8 264.9C326.5 263.4 328.3 262.0 329.9 261.7C332.7 261.2 332.8 261.3 332.8 267.1C332.8 270.4 333.2 273.8 333.5 274.7C333.8 275.7 331.7 279.1 327.9 283.3C319.4 292.8 309.2 312.6 309.2 319.3C309.2 321.4 308.4 321.6 301.1 321.5C295.0 321.5 293.6 321.1 295.5 320.5C298.3 319.3 298.3 319.2 304.0 301.8C307.9 289.9 309.2 281.3 307.1 282.7C306.6 283.0 305.8 285.5 305.4 288.1C304.4 294.4 298.7 308.3 295.0 313.5C293.5 315.7 292.3 316.9 292.7 315.8C298.0 299.6 299.4 293.8 300.0 286.5C300.5 277.2 298.7 274.0 297.3 282.0C293.7 303.4 291.2 308.0 292.0 292.0L292.7 278.6L289.4 279.1L286.2 279.4L285.4 290.5C284.4 303.9 283.3 305.9 283.3 294.5C283.3 285.4 282.3 282.2 280.2 284.7C279.4 285.7 279.1 290.8 279.2 298.5L279.5 310.9L284.4 315.7C287.1 318.3 289.0 320.8 288.5 321.2C288.2 321.7 287.1 321.0 286.0 319.8C284.6 318.0 284.4 317.9 284.9 319.6C285.7 322.0 284.7 322.0 281.8 319.9C278.7 317.5 275.8 317.6 277.7 319.9C279.0 321.4 278.4 321.6 274.0 321.6H268.8L268.3 315.7ZM281.4 275.2C285.4 273.1 287.8 272.7 295.9 272.8C301.4 272.8 305.8 272.7 305.8 272.5C305.8 272.3 303.0 271.3 299.5 270.2C294.8 268.7 293.8 268.0 295.4 267.5C296.6 266.9 295.5 266.6 292.0 266.6C283.5 266.5 275.5 271.1 275.5 276.3C275.5 278.2 275.9 278.2 281.4 275.2Z"],["M68.0 306.7C66.1 306.2 60.0 305.5 54.5 305.3C44.8 304.9 38.3 304.1 37.7 303.4C36.0 301.2 32.4 291.2 30.9 284.5C29.9 279.9 28.5 274.2 27.8 272.0C26.5 267.0 27.4 263.5 31.2 259.4C33.9 256.6 34.7 256.4 39.3 257.0C46.4 258.0 49.4 259.4 49.4 261.4C49.4 262.3 50.0 263.1 50.7 263.1C51.3 263.1 51.7 262.1 51.3 261.0C49.9 255.3 60.6 257.8 66.1 264.3C69.2 268.0 74.1 270.9 76.1 270.2C78.7 269.3 78.8 275.0 76.4 289.0C73.6 306.5 73.2 308.1 72.1 308.0C71.7 308.0 69.9 307.4 68.0 306.7Z","M68.0 306.7C66.1 306.2 60.0 305.5 54.5 305.3C44.8 304.9 38.3 304.1 37.7 303.4C36.0 301.2 32.4 291.2 30.9 284.5C29.9 279.9 28.5 274.2 27.8 272.0C26.5 267.0 27.4 263.5 31.2 259.4C33.9 256.6 34.7 256.4 39.3 257.0C46.4 258.0 49.4 259.4 49.4 261.4C49.4 262.3 50.0 263.1 50.7 263.1C51.3 263.1 51.7 262.1 51.3 261.0C49.9 255.3 60.6 257.8 66.1 264.3C69.1 268.0 74.6 271.3 75.7 270.1C76.6 269.3 78.7 272.0 78.7 274.1C78.7 274.8 77.9 275.5 76.9 275.5C75.3 275.5 75.1 276.6 75.5 283.1C76.1 289.8 75.4 297.2 73.6 305.6C72.9 308.3 72.8 308.4 68.0 306.7ZM46.1 296.7C46.1 295.0 45.5 294.5 43.6 294.8C39.8 295.4 39.4 299.1 43.1 299.1C45.4 299.1 46.1 298.5 46.1 296.7ZM55.1 296.8C55.1 295.4 50.8 293.2 49.4 294.0C47.0 295.6 48.3 298.0 51.7 298.0C53.5 298.0 55.1 297.5 55.1 296.8ZM42.0 289.4C44.7 286.8 44.1 285.6 40.4 285.6C37.6 285.6 37.1 286.0 37.1 288.4C37.1 291.7 39.4 292.1 42.0 289.4ZM51.7 286.5C48.4 283.8 47.3 283.9 46.2 286.9C45.3 289.3 45.6 289.5 49.3 290.1C54.2 290.8 55.2 289.3 51.7 286.5ZM52.8 280.9C52.8 278.7 49.2 275.5 47.0 275.5C43.6 275.5 44.8 280.2 48.3 281.2C52.5 282.3 52.8 282.3 52.8 280.9ZM41.3 280.1C44.4 278.2 42.3 274.9 38.3 274.9C33.9 274.9 32.8 276.6 35.4 279.3C37.4 281.3 39.1 281.5 41.3 280.1ZM66.3 268.3C66.3 264.7 63.3 262.1 62.3 264.8C61.4 267.0 63.7 272.4 65.2 271.5C65.8 271.2 66.3 269.6 66.3 268.3ZM56.0 269.6C55.6 268.8 54.7 268.2 53.9 268.2C53.1 268.2 52.2 268.8 51.9 269.6C51.7 270.4 52.5 271.0 53.9 271.0C55.4 271.0 56.2 270.4 56.0 269.6ZM46.1 268.3C46.1 265.9 42.7 262.9 40.5 263.3C37.6 263.9 37.7 267.5 40.7 268.6C44.5 270.2 46.1 270.1 46.1 268.3ZM35.9 262.9C35.9 261.2 33.8 262.0 32.7 264.1C31.1 266.9 32.7 268.3 34.5 265.8C35.3 264.7 35.9 263.4 35.9 262.9ZM60.1 264.1C61.2 262.4 60.0 261.5 57.9 262.4C56.9 262.8 56.4 263.5 56.7 264.2C57.6 265.7 59.2 265.7 60.1 264.1Z"],["M261.5 360.7C258.0 351.3 255.2 342.9 255.2 342.4C255.2 341.8 257.6 336.1 260.5 329.7C265.1 319.6 266.1 318.1 268.0 318.7C269.4 319.0 279.2 319.3 289.9 319.3C308.1 319.3 309.2 319.4 309.2 321.5C309.2 322.6 310.0 324.2 310.9 325C311.9 325.7 312.4 327.3 312.0 328.4C311.6 329.6 312.0 331.6 312.9 332.8C314.5 335.1 314.0 336.1 306.5 347.2C293.2 366.9 284.2 372.4 274.5 366.4C269.8 363.6 269.3 364.1 269.3 371.7C269.3 375.1 268.9 377.8 268.6 377.8C268.2 377.8 265.0 370.0 261.5 360.7Z","M265.5 371.5C262.6 364.1 262.6 364.5 264.8 364.1C266.0 363.9 266.1 363.3 265.2 362.1C264.2 360.6 264.0 360.6 263.4 361.9C263.0 363.0 261.4 360.1 259.6 355.3C256.5 347.1 256.5 347.0 258.5 344.7C261.4 341.4 264.4 335.2 263.7 333.9C262.2 331.6 260.6 333.0 258.0 338.7C256.6 341.9 255.3 343.8 255.3 342.8C255.2 340.2 264.1 321.4 266.1 319.9C267.0 319.2 269.8 319.0 272.7 319.3C277.2 319.8 278.1 320.6 282.1 326.3L286.7 332.6L293.7 332.0C302.2 331.2 302.8 330.9 298.2 329.2C293.6 327.4 293.7 326.3 298.5 325.4C304.6 324.3 301.9 322.4 295.4 323.2C291.7 323.5 289.1 323.3 288.0 322.4C286.6 321.2 286.4 321.4 287.2 323.3C287.8 325.2 287.6 325.2 285.1 322.8C282.1 320.0 282.0 318.0 285.0 320.5C286.4 321.6 286.7 321.6 286.7 320.3C286.7 319.2 287.2 319.3 288.5 320.7C290.1 322.3 290.8 322.3 294.1 320.9C300.0 318.4 309.2 318.8 309.2 321.5C309.2 322.6 310.0 324.2 310.9 325C311.9 325.7 312.4 327.3 312.0 328.4C311.6 329.6 312.0 331.6 312.9 332.8C314.5 335.1 314.0 336.1 306.5 347.2C293.2 366.9 284.2 372.4 274.5 366.4C269.8 363.6 269.3 364.1 269.3 371.7C269.3 379.4 268.5 379.4 265.5 371.5ZM278.8 361.8C278.8 361.3 278.2 360.9 277.3 360.9C275.5 360.9 273.0 363.6 273.9 364.6C274.7 365.4 278.8 363.1 278.8 361.8ZM272.5 358.8C274.2 357.0 274.2 356.6 272.7 355.3C270.3 353.3 267.6 354.8 267.6 358.1C267.6 361.5 269.8 361.8 272.5 358.8ZM287.3 357.3C290.7 342.5 290.3 340.9 286.0 349.8L283.2 355.9L283.9 347.9C284.6 340.1 284.5 339.7 281.4 336.6C279.6 334.8 277.4 332.1 276.4 330.6L274.5 327.8L274.3 331.1C274.3 333.0 273.3 336.2 272.1 338.2L269.8 341.9L273.4 340.0L277.2 338.2L273.3 342.2L269.6 346.1L272.1 349.7C274.9 353.6 282.9 359.8 285.1 359.8C286.0 359.8 286.9 358.7 287.3 357.3ZM293.9 356.7C295.1 352.1 295.8 347.4 295.1 347.4C294.5 347.4 290.1 357.1 290.1 358.8C290.1 360.4 293.4 358.6 293.9 356.7ZM272.5 332.3C273.7 328.0 271.5 324.8 268.4 326.0C265.7 327.0 265.6 327.4 266.9 331.9C268.0 336.0 271.6 336.1 272.5 332.3Z"],["M164.4 173.5L151.8 162.6V156.7C151.8 151.9 152.2 150.4 154.2 149.1C157.5 146.7 162.9 146.8 166.2 149.1C167.6 150.1 169.1 150.6 169.4 150.3C170.3 149.4 165.4 122.9 163.5 117.9C161.8 113.9 161.9 113.5 164.6 109.4C166.2 107.0 168.7 101.8 170.4 97.8C173.9 88.9 173.6 89.5 176.3 91.2C178.4 92.5 179.1 92.2 182.9 87.9C185.3 85.2 190.3 81.5 194.5 79.5C204.6 74.4 205.6 70.8 199.6 60.9C188.0 42.0 199.7 27.5 226.6 27.5C236.2 27.5 237.1 27.7 246.5 32.3C270.3 44.3 279.9 64.6 275.6 94.1C273.9 105.5 275.4 110.9 280.9 113.6C283.7 115.1 284.1 115.7 282.7 116.2C275.8 118.8 270.9 115.2 268.3 105.7L266.6 99.5V106.6C266.5 118.5 272.0 125.9 281.1 125.9C288.5 125.9 295.5 118.7 294.1 112.3C293.4 108.1 294.9 108.9 296.8 113.5C301.7 125.2 289.6 135.0 272.3 133.4L264.8 132.6L268.4 134.9C270.4 136.0 273.3 139.1 274.9 141.4C276.9 144.5 279.0 146.1 281.3 146.6C285.8 147.5 287.3 146.6 263.1 157.6C244.0 166.4 239.6 167.8 210.0 175.7C192.3 180.6 177.6 184.4 177.4 184.4C177.2 184.3 171.3 179.4 164.4 173.5Z","M166.2 175.0C155.0 165.6 154.1 164.1 156.5 159.2C158.2 155.4 161.1 154.6 165.6 156.7L169.2 158.5L166.0 155.7C160.9 151.1 157.5 152.0 154.4 159.1L152.3 163.6L152.0 157.4C151.7 152.2 152.0 150.9 154.1 149.3C157.2 146.8 162.8 146.7 166.2 149.1C167.6 150.1 169.1 150.6 169.4 150.3C170.3 149.4 165.4 122.9 163.5 117.9C161.8 113.9 161.9 113.5 164.6 109.4C166.2 107.0 168.7 101.8 170.4 97.8C173.9 88.9 173.6 89.5 176.3 91.2C178.4 92.5 179.1 92.2 182.9 87.9C185.3 85.2 190.3 81.5 194.5 79.5C204.6 74.4 205.6 70.8 199.6 60.9C188.0 42.0 199.7 27.5 226.6 27.5C236.2 27.5 237.1 27.7 246.5 32.3C270.3 44.3 279.9 64.6 275.6 94.1C273.9 105.5 275.4 110.9 280.9 113.6C283.7 115.1 284.1 115.7 282.7 116.2C275.8 118.8 270.9 115.2 268.3 105.7L266.6 99.5V106.6C266.5 118.5 272.0 125.9 281.1 125.9C288.5 125.9 295.5 118.7 294.1 112.3C293.4 108.1 294.9 108.9 296.8 113.5C301.7 125.2 289.6 135.0 272.3 133.4L264.8 132.6L268.4 134.9C270.4 136.0 273.3 139.1 274.9 141.4C276.9 144.6 279.0 146.1 281.4 146.7C284.9 147.4 284.8 147.5 275.5 152.0C269.2 154.9 264.1 156.6 260.7 156.7C255.6 156.9 255.2 157.2 244.5 165.7C243.1 166.8 241.3 167.5 240.5 167.3C238.5 166.6 246.7 158.0 252.6 154.4C259.2 150.5 258.0 149.7 251.1 153.3C244.9 156.6 241.3 159.6 236.9 165.4C235.2 167.6 232.7 169.8 231.6 170.1C228.8 170.8 228.8 170.7 231.5 165.5C238.0 152.9 253.2 140.6 262.2 140.5L265.9 140.4L262.8 138.7C258.5 136.4 255.1 137.4 246.8 143.0C238.7 148.4 231.5 156.8 227.5 165.3C225.8 168.6 224.4 171.6 224.3 171.7C224.2 171.9 178.1 184.4 177.4 184.4C177.2 184.4 172.1 180.1 166.2 175.0ZM208.7 171.9C217.3 167.8 221.0 164.0 213.1 167.5C200.5 172.9 188.1 175.9 196.6 171.4C201.6 169.0 201.0 168.2 194.8 169.1C187.9 170.0 189.0 169.2 201.5 164.1C210.6 160.4 223.7 153.5 223.7 152.3C223.7 152.1 219.2 153.9 213.7 156.4C199.4 162.7 187.3 165.7 182.4 164.0C178.0 162.6 174.3 165.0 173.9 169.5C173.8 171.3 173.5 171.6 172.3 170.7C168.9 167.8 171.1 173.4 175.2 177.5L179.4 182.0L190.7 178.6C196.7 176.7 205.0 173.7 208.7 171.9ZM182.1 175.2C182.1 174.4 182.9 172.8 183.7 171.7C185.3 169.6 185.3 169.8 186.1 171.9C186.4 173.2 186.4 174.7 186.1 175.4C185.1 177.0 182.1 176.7 182.1 175.2ZM177.9 168.4C176.3 166.8 176.1 165.3 177.6 165.3C178.2 165.3 179.2 166.3 179.9 167.5C181.2 170.0 180.0 170.5 177.9 168.4ZM195.1 148.7C211.3 140.5 220.5 131.9 220.4 125.1C220.3 123.7 219.7 124.1 218.5 126.5C214.6 133.8 206.3 140.2 190.3 148.3C178.0 154.5 175.7 154.1 187.4 147.9C204.8 138.5 211.4 133.1 211.4 127.9C211.4 123.4 209.8 124.0 207.7 129.3C205.3 135.2 203.5 135.0 203.5 128.6C203.5 124.3 203.2 123.5 201.5 123.9C200.0 124.1 199.4 125.7 199.0 130.7C198.1 141.1 195.2 141.4 194.5 131.3C193.6 117.9 189.6 120.2 189.0 134.3C188.8 141.4 187.6 145.2 186.2 143.8C185.8 143.4 185.3 138.6 184.8 133.0C184.3 125.6 183.6 122.5 182.5 122.1C179.0 120.7 178.4 122.8 179.0 135.6C179.3 142.7 179.2 148.4 178.6 148.4C177.6 148.4 174.3 134.2 174.1 129.1C174.0 124.4 172.7 120.6 171.7 122.2C170.5 124.0 174.5 148.1 177.1 156.0C177.6 157.5 178.4 157.2 195.1 148.7ZM238.7 141.2C245.1 135.9 254.2 131.5 258.7 131.5L262.5 131.4L257.8 128.9C246.3 122.9 243.1 117.2 242.2 102.4C241.8 97.1 240.8 90.6 239.9 88.0C238.1 83.2 232.6 77.9 230.5 79.2C228.2 80.6 229.4 88.0 232.7 94.0C238.5 103.9 238.4 114.4 232.5 126.4C230.0 131.2 229.6 139.1 231.6 142.7C233.2 145.7 233.2 145.7 238.7 141.2ZM213.1 117.0C212.7 116.5 209.6 115.1 206.1 114.1C198.5 111.8 188.2 106.9 181.9 102.3C179.4 100.5 177.0 99.1 176.5 99.5C174.9 100.5 169.6 111.5 170.3 112.3C171.2 113.2 174.1 109.3 175.0 105.9C175.8 102.7 176.1 102.7 182.1 106.8C187.8 110.6 187.5 111.1 181.6 108.2C177.6 106.3 175.5 107.1 175.4 110.3C175.4 110.9 207.5 117.8 211.7 117.9C212.8 118.0 213.5 117.6 213.1 117.0ZM225.8 114.9C226.1 113.0 225.5 112.4 223.9 112.4C222.3 112.4 221.5 113.1 221.5 114.4C221.5 118.7 225.2 119.0 225.8 114.9ZM219.5 110.7C221.7 107.9 225.3 107.0 226.6 109.0C226.9 109.7 227.8 110.2 228.5 110.2C229.1 110.2 228.8 109.1 227.7 107.9C224.0 103.7 215.9 106.2 215.9 111.5C215.9 114.2 216.8 114.1 219.5 110.7ZM204.5 101.4C205.9 96.7 210.8 88.8 212.6 88.8C213.3 88.8 213.4 88.3 213.1 87.7C210.7 83.8 199.1 89.1 195.2 95.8C191.5 102.1 191.5 102.1 195.9 104.0C201.8 106.6 203.3 106.1 204.5 101.4ZM218.0 101.5C220.5 100.4 220.6 100.3 218.7 100.1C216.0 100.0 211.4 103.0 211.4 104.8C211.4 105.4 212.2 105.3 213.2 104.4C214.3 103.5 216.4 102.3 218.0 101.5ZM192.7 97.5C194.5 93.0 200.8 86.8 204.4 85.9C205.7 85.4 206.9 84.7 206.9 84.2C206.9 80.8 194.3 84.6 188.8 89.6C183.8 94.1 183.3 96.8 186.9 99.2C190.5 101.7 190.9 101.6 192.7 97.5ZM214.7 97.2C216.3 96.3 219.4 95.5 221.5 95.4C225.1 95.3 225.2 95.2 222.6 94.5C219.2 93.5 213.8 94.9 211.5 97.2C209.3 99.4 211.0 99.4 214.7 97.2ZM218.6 79.7C215.8 76.5 210.5 73.8 208.4 74.6C205.6 75.7 206.8 77.4 211.1 78.7C213.4 79.2 216.1 80.2 217.0 80.9C219.9 82.8 220.8 82.2 218.6 79.7ZM260.7 74.4C257.0 64.7 242.3 58.8 233.9 63.5C231.2 65 231.3 65 235.8 64.4C243.5 63.4 250.5 66.0 256.4 72.0C259.2 75.0 261.5 77.3 261.6 77.4C261.7 77.5 261.4 76.2 260.7 74.4ZM214.9 73.0C212.2 70.7 209.1 70.1 209.1 71.8C209.1 72.4 210.5 73.4 212.3 73.9C217.0 75.7 217.8 75.4 214.9 73.0ZM219.7 71.2C216.5 68.7 210.1 66.1 209.2 67.0C208.9 67.4 209.1 68.0 209.8 68.2C210.5 68.4 213.3 69.8 216.0 71.1C221.4 73.9 223.1 73.9 219.7 71.2ZM216.3 46.6C220.5 40.5 228.2 36.0 234.8 35.9C236.7 35.9 238.4 35.5 238.4 34.8C238.4 33.1 228.7 33.5 224.1 35.4C216.1 38.7 211.3 45.8 211.5 54.2L211.6 59.0L212.7 54.5C213.4 52.0 215.0 48.5 216.3 46.6ZM248.4 50.8C253.7 50.4 257.0 50.8 260.2 52.1C265.3 54.3 266.6 53.8 262.6 51.3C255.7 46.7 243.1 47.1 235.4 52.0C229.7 55.7 229.9 57.4 235.8 54.2C239.3 52.2 243.2 51.2 248.4 50.8ZM202.7 45.5C203.2 41.9 203.0 40.7 202.4 42.1C201.5 44.3 200.8 52.6 201.7 51.6C201.9 51.3 202.4 48.5 202.7 45.5Z"]];
+const POLE='<g id="pole" fill="#292929"><rect x="49.2" y="-262" width="5.6" height="862" rx="2.5"/><path d="M52 -300L59 -266L55 -269L55 -258L49 -258L49 -269L45 -266Z"/><rect x="46" y="-252" width="12" height="4.5" rx="2"/><rect x="47.5" y="-230" width="9" height="3.5" rx="1.5"/><rect x="47" y="592" width="10" height="11" rx="2.5"/></g>';
+box.innerHTML=`<div class="kn"><i class="ks"></i><div class="rot"><div class="mir"><svg class="kz" viewBox="0 0 365 650" aria-hidden="true"><g id="kr">${POLE}${PARTS.map((p,i)=>`<g id="kp${i}"><path d="${p[0]}" fill="#fff" fill-rule="evenodd"/><path d="${p[1]}" fill="#292929" fill-rule="evenodd"/></g>`).join('')}</g></svg></div><div class="kf" id="kf"></div></div></div><svg class="g" preserveAspectRatio="none" viewBox="0 0 600 24" aria-hidden="true"><defs><pattern id="gr" width="10" height="24" patternUnits="userSpaceOnUse"><path d="M0 24L1.5 3L3 24L4.5 9L6 24L7.5 1L9 24Z" fill="#292929"/></pattern></defs><rect width="600" height="24" fill="url(#gr)"/></svg>`;
+const kn=$('.kn',box),ks=$('.ks',box),kf=$('#kf'),kr=$('#kr',box),pole=$('#pole',box),P=i=>$('#kp'+i,box),PP=[...Array(15).keys()].map(P);
+Flag(kf,'<div style="width:100%;height:100%;background:#e8b23a;display:grid;place-items:center"><svg style="width:80px;height:80px;fill:#292929"><use href="#logo"/></svg></div>',225,100,true);
+const lp=(a,b,k)=>a+(b-a)*k,es=t=>t*t*(3-2*t),sn=t=>.5-.5*Math.cos(Math.PI*t),c=t=>Math.min(1,Math.max(0,t));
+const bf=t=>t<1.1?0:t<2.7?sn((t-1.1)/1.6):t<3.9?1:t<5.5?1-sn((t-3.9)/1.6):0;
+const KH=[[0,18],[.27,0],[.53,-18],[.62,-9],[.72,2],[.84,11],[.93,17],[1,18]],KK=[[0,6],[.0625,11],[.125,12],[.1875,8],[.25,6],[.3125,6],[.375,6],[.4375,9],[.5,22],[.5625,58],[.625,72],[.6875,70],[.75,56],[.8125,44],[.875,32],[.9375,18],[1,6]],KA=[[0,12],[.08,0],[.4,0],[.53,-26],[.62,-46],[.72,-32],[.8,-10],[.9,6],[1,12]];
+const GF=1/1.28;
+function kf2(p,P){p-=Math.floor(p);for(let i=1;i<P.length;i++)if(p<=P[i][0]){const a=P[i-1],b=P[i],k=(p-a[0])/(b[0]-a[0]);return lp(a[1],b[1],.5-.5*Math.cos(Math.PI*k))}return P[P.length-1][1]}
+const rt=(v,a)=>{const r=a*Math.PI/180,C=Math.cos(r),S=Math.sin(r);return[v[0]*C-v[1]*S,v[0]*S+v[1]*C]};
+/* leg geometry measured from the SVG parts: hip, knee, ankle in the drawn pose, boot toe/heel offsets, ids */
+const mk=(H,K,A,to,he,ids)=>{const v1=[K[0]-H[0],K[1]-H[1]],v2=[A[0]-K[0],A[1]-K[1]],ag=v=>Math.atan2(-v[0],v[1])*180/Math.PI,L1=Math.hypot(...v1),L2=Math.hypot(...v2);return{H,K,A,L1,L2,to,he,t0:ag(v1),f0:ag(v2),rest:L1+L2+he[1],ids}};
+const LG=[mk([165,400],[172,478],[170,585],[-62,26],[28,26],[2,4,6]),mk([252,388],[265,482],[292,575],[-17,48],[34,48],[3,5,7])];
+function solve(g,th,k,ps){const K=rt([0,g.L1],th),phi=th-k,B=rt([0,g.L2],phi),A=[K[0]+B[0],K[1]+B[1]],to=rt(g.to,ps),he=rt(g.he,ps),yt=A[1]+to[1],yh=A[1]+he[1],wt=Math.exp(.4*(yt-g.rest)),wh=Math.exp(.4*(yh-g.rest)),w=wt+wh;
+return{th,k,ps,phi,y:(wt*yt+wh*yh)/w,xh:A[0]+he[0],xt:A[0]+to[0],wh:wh/w,wt:wt/w}}
+let CYC=230;(function(){let tot=0,pv=null;for(let n=0;n<=300;n++){const p=n/300,R=LG.map((g,i)=>solve(g,kf2(p+i*.5,KH),kf2(p+i*.5,KK),kf2(p+i*.5,KA))),wy=R.map((r,i)=>Math.exp(.35*(r.y-LG[i].rest))),ws=wy[0]+wy[1];if(pv)R.forEach((r,i)=>{tot+=wy[i]/ws*(r.wh*(r.xh-pv[i][0])+r.wt*(r.xt-pv[i][1]))});pv=R.map(r=>[r.xh,r.xt])}if(tot>40)CYC=tot})();
+const E=(a,x,y)=>`rotate(${a.toFixed(2)} ${x} ${y})`;
+const rp=(p,o,d)=>{const r=d*Math.PI/180,C=Math.cos(r),Sn=Math.sin(r),dx=p[0]-o[0],dy=p[1]-o[1];return[o[0]+dx*C-dy*Sn,o[1]+dx*Sn+dy*C]};
+let on=true,x=null,ph=0,tt=-1,done=false,last=performance.now();
+new IntersectionObserver(q=>{on=q[0].isIntersecting}).observe(box);
+function frame(now){requestAnimationFrame(frame);const dt=Math.min(now-last,50)/1000;last=now;if(!on)return;
+const W=box.clientWidth,kh=Math.max(200,Math.min(330,W*.26)),s=kh/595,v=GF*CYC*s;box.style.height=(950*s+36)+'px';kn.style.bottom=(6-30*s)+'px';
+if(x===null)x=-365*s-30;
+let sp=1,bow=0;
+if(RM){sp=0;x=(W-365*s)/2}
+else{
+if(tt<0&&!done&&x+182*s>=W/2)tt=0;
+if(tt>=0){tt+=dt;sp=tt<.9?1-es(tt/.9):tt>=5.6?es(c((tt-5.6)/.9)):0;if(tt>=6.5){tt=-1;done=true}}
+x+=v*sp*dt;if(x>W+60*s){x=-365*s-40;done=false}}
+const B=[bf(tt),bf(tt-.1),bf(tt-.2),bf(tt-.32)];bow=B[0];
+ph+=GF*sp*dt;
+const R=LG.map((g,i)=>{const p=ph+i*.5;return solve(g,lp(14*bow,kf2(p,KH),sp),lp(3+24*bow,kf2(p,KK),sp),lp(0,kf2(p,KA),sp))});
+const wy=R.map((r,i)=>Math.exp(.35*(r.y-LG[i].rest))),ws=wy[0]+wy[1];let down=0;R.forEach((r,i)=>{down+=wy[i]/ws*(LG[i].rest-r.y)});
+const a=ph*6.2832,S=Math.sin(a),idle=Math.sin(now/1100),sway=1.2*sp*S;
+/* legs: thigh about the hip, shin about the knee, boot about the ankle */
+R.forEach((r,i)=>{const g=LG[i],[t,sh,bt]=g.ids,tr=r.th-g.t0,sr=-r.k-(g.f0-g.t0),br=r.ps-r.phi+g.f0;
+const T=E(tr,g.H[0],g.H[1]),Sx=T+' '+E(sr,g.K[0],g.K[1]),Bx=Sx+' '+E(br,g.A[0],g.A[1]);
+PP[t].setAttribute('transform',T);PP[sh].setAttribute('transform',Sx);PP[bt].setAttribute('transform',Bx)});
+/* spine: pelvis, chest, shoulders and head each take a share of the bend */
+const pTx=9*B[0]+1.8*sp*S,pTy=5*B[0]+.6*idle*(1-sp),pA=-5*B[0]+2.3*sp*S,cA=-11*B[1]-1.7*sp*S,uA=-10*B[2]+1.1*sp*S,hA=-13*B[3]-1.2*sp*S;
+const pel=`translate(${pTx.toFixed(1)} ${pTy.toFixed(1)}) ${E(pA,200,470)}`,che=pel+' '+E(cA,195,430),upp=che+' '+E(uA,195,240),hea=upp+' '+E(hA,205,182);
+const arm=upp+' '+E(6*sp*S,272,215),fore=arm+' '+E(-5*sp*S,298,302);
+PP[1].setAttribute('transform',pel);PP[0].setAttribute('transform',che);
+[8,10,12].forEach(i=>PP[i].setAttribute('transform',upp));PP[9].setAttribute('transform',arm);PP[11].setAttribute('transform',fore);PP[13].setAttribute('transform',fore);PP[14].setAttribute('transform',hea);
+kr.setAttribute('transform',`translate(${sway.toFixed(2)} ${down.toFixed(2)})`);
+/* the pole always passes through the gripping fist */
+let hh=rp([52,283],[195,240],uA);hh=rp(hh,[195,430],cA);hh=rp(hh,[200,470],pA);hh=[hh[0]+pTx,hh[1]+pTy];
+const rho=Math.atan2(hh[0]-52,600-hh[1]);
+pole.setAttribute('transform',`rotate(${(rho*57.2958).toFixed(2)} 52 600)`);
+kf.style.transform=`translate(${(-sway-855*Math.sin(rho)).toFixed(1)}px,${(down+855*(1-Math.cos(rho))).toFixed(1)}px) rotate(${(-rho*57.2958).toFixed(2)}deg)`;
+ks.style.transform=`scaleX(${(1+.04*sp*Math.abs(S)).toFixed(3)})`;
+kf._amp=.65+.5*sp;
+kn.style.transform=`translate3d(${x.toFixed(1)}px,0,0) scale(${s.toFixed(3)})`}
+requestAnimationFrame(frame)})();
 </script>
 </body>
 </html>
