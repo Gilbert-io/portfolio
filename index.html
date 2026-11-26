@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="color-scheme" content="dark"><meta name="theme-color" content="#0a0a0c"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>try{if(sessionStorage.getItem("intro"))document.documentElement.classList.add("seen")}catch(e){}</script><meta name="color-scheme" content="dark"><meta name="theme-color" content="#0a0a0c"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta property="og:title" content="Gilbert | Portfolio" />
 <meta property="og:description" content="Explore my portfolio, projects, skills and digital solutions." />
 
@@ -42,13 +42,14 @@ h2{font-size:clamp(2.1rem,6vw,4.8rem)}
 .lg{width:1.6em;height:1.6em;fill:currentColor;flex:none}
 /* intro */
 #pre{position:fixed;inset:0;z-index:100;color:var(--fg);display:grid;place-items:center}
+html.seen #pre{display:none}
 #pre .hl,#pre .hr{position:absolute;top:0;bottom:0;width:50.5%;background:#08080a}#pre .hl{left:0}#pre .hr{right:0}
 #pre .mid{position:relative;text-align:center}
-.frame{position:relative;width:clamp(150px,34vw,260px);aspect-ratio:3/4;margin:0 auto;border-radius:18px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.7),0 0 0 1px rgba(232,178,58,.35)}
-.frame img{width:100%;height:100%;object-fit:cover;display:block}
+.frame{position:relative;width:clamp(150px,34vw,260px);aspect-ratio:3/4;margin:0 auto;border-radius:18px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.7),0 0 0 1px rgba(232,178,58,.35);opacity:0;will-change:transform,opacity;transform:translateZ(0);backface-visibility:hidden}
+.frame img{width:100%;height:100%;object-fit:cover;display:block;will-change:transform;transform:translateZ(0)}
 .badge{position:absolute;left:50%;bottom:-22px;margin-left:-32px;width:64px;height:64px;border-radius:50%;background:var(--gold);color:var(--on);display:grid;place-items:center;box-shadow:0 8px 20px rgba(0,0,0,.5)}
 .badge svg{width:42px;height:42px;fill:currentColor}
-#pre .nm{margin-top:42px;font:400 clamp(1.4rem,4vw,2.2rem) "DM Serif Display",Georgia,serif}
+#pre .nm{opacity:0;min-height:1.3em;margin-top:42px;font:400 clamp(1.4rem,4vw,2.2rem) "DM Serif Display",Georgia,serif}
 #pre .cnt{position:absolute;left:clamp(16px,4vw,56px);bottom:calc(env(safe-area-inset-bottom,0px) + 24px);font-size:clamp(3rem,13vw,8rem);line-height:.8;font-weight:500;font-variant-numeric:tabular-nums}
 #skip{position:absolute;right:clamp(16px,4vw,56px);bottom:calc(env(safe-area-inset-bottom,0px) + 24px);background:none;border:1px solid var(--gold);color:var(--gold2);border-radius:99px;padding:10px 18px;font:inherit;font-size:.9rem;cursor:pointer;min-height:44px}
 /* header */
@@ -296,14 +297,14 @@ lenis&&lenis.stop();document.body.style.overflow='hidden';
 let end=false;const o={v:0};
 function out(fast){if(end)return;end=true;try{sessionStorage.setItem('intro','1')}catch(e){}tl.kill();const d=fast?.7:1;
 const x=gsap.timeline({onComplete:()=>{pre.remove();document.body.style.overflow='';lenis&&lenis.start();ScrollTrigger.refresh()}});
-x.to('#pre .mid,#pre .cnt,#skip',{opacity:0,scale:fast?1:1.12,duration:.45*d,ease:'power2.in'})
+x.to('#pre .mid,#pre .cnt,#skip',{opacity:0,scale:fast?1:1.04,duration:.45*d,ease:'power2.in'})
 .to('#pre .hl',{xPercent:-100,duration:1*d,ease:'expo.inOut'},.3*d).to('#pre .hr',{xPercent:100,duration:1*d,ease:'expo.inOut'},.3*d).add(()=>heroIn(0),.55*d)}
 const tl=gsap.timeline({onComplete:()=>out(false)});
-tl.from('.frame',{clipPath:'inset(100% 0 0 0)',duration:.9,ease:'expo.out'}).from('#pre .nm',{y:20,opacity:0,duration:.6,ease:'power3.out'},.6)
+tl.fromTo('.frame',{opacity:0,y:36,scale:.94},{opacity:1,y:0,scale:1,duration:1.1,ease:'power3.out',force3D:true}).fromTo('#me0',{scale:1.18},{scale:1,duration:1.6,ease:'power3.out',force3D:true},0).fromTo('#pre .nm',{opacity:0,y:14},{opacity:1,y:0,duration:.7,ease:'power3.out'},.5)
 .to(o,{v:100,duration:1.9,ease:'power2.inOut',onUpdate:()=>{$('#pct').textContent=Math.round(o.v)}},.1);
 $('#skip').onclick=()=>{$('#pct').textContent=100;out(true)}}
-const im0=$('#me0');
-Promise.race([im0.decode?im0.decode().catch(()=>{}):Promise.resolve(),new Promise(r=>setTimeout(r,2500))]).then(intro);
+const im0=$('#me0'),seenIntro=(()=>{try{return sessionStorage.getItem('intro')}catch(e){return null}})();
+if(seenIntro||RM)intro();else Promise.race([Promise.all([im0.decode?im0.decode().catch(()=>{}):0,document.fonts?document.fonts.ready:0]),new Promise(r=>setTimeout(r,2500))]).then(intro);
 if(!RM){
 gsap.utils.toArray('[data-r]').forEach(el=>gsap.from(el,{y:44,opacity:0,duration:.9,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 90%',once:true}}));
 gsap.fromTo('.lw',{opacity:.18},{opacity:1,stagger:.1,ease:'none',scrollTrigger:{trigger:'#lead',start:'top 85%',end:'bottom 50%',scrub:true}});
